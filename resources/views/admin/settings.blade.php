@@ -17,8 +17,9 @@
 
     {{-- Flash messages --}}
     @if(session('status'))
-        <div class="mb-4 px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700
-                        dark:bg-green-900/20 dark:border-green-700 dark:text-green-300 text-sm flex items-center gap-2">
+        <div
+            class="mb-4 px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700
+                                                                dark:bg-green-900/20 dark:border-green-700 dark:text-green-300 text-sm flex items-center gap-2">
             <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
             </svg>
@@ -26,8 +27,9 @@
         </div>
     @endif
     @if($errors->any())
-        <div class="mb-4 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700
-                        dark:bg-red-900/20 dark:border-red-700 dark:text-red-300 text-sm">
+        <div
+            class="mb-4 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700
+                                                                dark:bg-red-900/20 dark:border-red-700 dark:text-red-300 text-sm">
             <ul class="list-disc list-inside space-y-0.5">
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -135,16 +137,18 @@
                                 {{-- Staged pairs --}}
                                 <div class="space-y-1.5 mb-3" x-show="pairs.length > 0">
                                     <template x-for="(pair, idx) in pairs" :key="idx">
-                                        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg
-                                                bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
+                                        <div
+                                            class="flex items-center gap-2 px-3 py-1.5 rounded-lg
+                                                                                        bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
                                             <span
                                                 class="text-xs font-mono font-semibold text-blue-500 dark:text-blue-400 min-w-[60px]"
                                                 x-text="pair.code || '—'"></span>
                                             <span class="text-xs text-slate-700 dark:text-slate-200 flex-1"
                                                 x-text="pair.name"></span>
-                                            <button type="button" @click="removePair(idx)" class="w-4 h-4 rounded-full flex items-center justify-center
-                                                       text-blue-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20
-                                                       transition-colors font-bold leading-none text-xs">×</button>
+                                            <button type="button" @click="removePair(idx)"
+                                                class="w-4 h-4 rounded-full flex items-center justify-center
+                                                                                               text-blue-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20
+                                                                                               transition-colors font-bold leading-none text-xs">×</button>
                                         </div>
                                     </template>
                                 </div>
@@ -155,17 +159,18 @@
                                         @keydown.enter.prevent="addPair()" @keydown.tab.prevent="$refs.nameInput.focus()"
                                         placeholder="Position Code…"
                                         class="w-36 flex-shrink-0 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                              bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                              focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder-slate-400" />
+                                                                                      bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                      focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder-slate-400" />
                                     <input type="text" x-ref="nameInput" x-model="currentName"
                                         @keydown.enter.prevent="addPair()" placeholder="Position…"
                                         class="flex-1 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                              bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                              focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder-slate-400" />
-                                    <button type="button" @click="addPair()" class="flex items-center gap-1.5 px-4 py-2 bg-slate-100 dark:bg-slate-700
-                                               text-slate-600 dark:text-slate-300 text-sm font-semibold rounded-xl
-                                               hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-300
-                                               border border-slate-200 dark:border-slate-600 transition-all active:scale-95">
+                                                                                      bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                      focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder-slate-400" />
+                                    <button type="button" @click="addPair()"
+                                        class="flex items-center gap-1.5 px-4 py-2 bg-slate-100 dark:bg-slate-700
+                                                                                       text-slate-600 dark:text-slate-300 text-sm font-semibold rounded-xl
+                                                                                       hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-300
+                                                                                       border border-slate-200 dark:border-slate-600 transition-all active:scale-95">
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -195,7 +200,7 @@
                                     <button type="submit" :disabled="pairs.length === 0"
                                         :class="pairs.length === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:bg-blue-700 active:scale-95 shadow shadow-blue-500/30'"
                                         class="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white text-sm
-                                               font-semibold rounded-xl transition-all">
+                                                                                       font-semibold rounded-xl transition-all">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -209,9 +214,10 @@
 
                         {{-- Search --}}
                         <div class="px-6 py-3 border-b border-slate-100 dark:border-slate-700" x-data="{ posSearch: '' }">
-                            <input type="text" x-model="posSearch" placeholder="Search positions…" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                      bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
-                                      text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
+                            <input type="text" x-model="posSearch" placeholder="Search positions…"
+                                class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
+                                                                              bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
+                                                                              text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
 
                             {{-- Existing entries --}}
                             <div class="mt-3 max-h-64 overflow-y-auto -mx-3 divide-y divide-slate-50 dark:divide-slate-700/50"
@@ -226,7 +232,7 @@
                                             @if($pos->code)
                                                 <span
                                                     class="flex-shrink-0 text-xs font-mono font-semibold px-1.5 py-0.5 rounded
-                                                                 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">{{ $pos->code }}</span>
+                                                                                                                                                 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">{{ $pos->code }}</span>
                                             @endif
                                             <span class="text-sm text-slate-700 dark:text-slate-300 truncate"
                                                 x-text="editName"></span>
@@ -238,12 +244,14 @@
                                             class="flex-1 flex items-center gap-2 pr-3" style="display:none">
                                             @csrf
                                             @method('PUT')
-                                            <input type="text" name="code" x-model="editCode" placeholder="Code" class="w-28 flex-shrink-0 px-2.5 py-1 rounded-lg border border-blue-300 dark:border-blue-600
-                                                          bg-white dark:bg-slate-700 text-sm font-mono text-slate-800 dark:text-slate-100
-                                                          focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                            <input type="text" name="name" x-model="editName" class="flex-1 px-2.5 py-1 rounded-lg border border-blue-300 dark:border-blue-600
-                                                          bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                          focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <input type="text" name="code" x-model="editCode" placeholder="Code"
+                                                class="w-28 flex-shrink-0 px-2.5 py-1 rounded-lg border border-blue-300 dark:border-blue-600
+                                                                                                                      bg-white dark:bg-slate-700 text-sm font-mono text-slate-800 dark:text-slate-100
+                                                                                                                      focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <input type="text" name="name" x-model="editName"
+                                                class="flex-1 px-2.5 py-1 rounded-lg border border-blue-300 dark:border-blue-600
+                                                                                                                      bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                      focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <button type="submit"
                                                 class="px-2.5 py-1 text-xs font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Save</button>
                                             <button type="button"
@@ -254,8 +262,9 @@
                                         {{-- Actions --}}
                                         <div class="flex items-center gap-1 flex-shrink-0" x-show="!editing">
                                             {{-- Edit --}}
-                                            <button type="button" @click="editing = true" title="Edit" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-blue-500 dark:hover:text-blue-400
-                                                           hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+                                            <button type="button" @click="editing = true" title="Edit"
+                                                class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-blue-500 dark:hover:text-blue-400
+                                                                                                                       hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
                                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                     stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -267,8 +276,9 @@
                                                 onsubmit="return confirm('Delete position &quot;{{ addslashes($pos->name) }}&quot;?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" title="Delete" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
-                                                               hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                                <button type="submit" title="Delete"
+                                                    class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
+                                                                                                                           hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                         stroke-width="2.5">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -317,22 +327,24 @@
                                 @csrf
 
                                 <div class="w-full min-h-[44px] px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                        bg-slate-50 dark:bg-slate-700 flex flex-wrap gap-1.5 items-center cursor-text mb-3"
+                                                                                bg-slate-50 dark:bg-slate-700 flex flex-wrap gap-1.5 items-center cursor-text mb-3"
                                     @click="$refs.chipInput.focus()">
                                     <template x-for="chip in chips" :key="chip">
                                         <span class="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-lg
-                                                 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300
-                                                 text-xs font-medium select-none">
+                                                                                         bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300
+                                                                                         text-xs font-medium select-none">
                                             <span x-text="chip"></span>
-                                            <button type="button" @click.stop="remove(chip)" class="w-3.5 h-3.5 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800
-                                                       flex items-center justify-center text-indigo-500 hover:text-red-500
-                                                       transition-colors font-bold leading-none">×</button>
+                                            <button type="button" @click.stop="remove(chip)"
+                                                class="w-3.5 h-3.5 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800
+                                                                                               flex items-center justify-center text-indigo-500 hover:text-red-500
+                                                                                               transition-colors font-bold leading-none">×</button>
                                         </span>
                                     </template>
                                     <input type="text" x-ref="chipInput" x-model="current" @keydown.enter.prevent="add()"
                                         @keydown.","="add(); $event.preventDefault()"
-                                        placeholder="Type an office name, press Enter to stage it…" class="flex-1 min-w-[200px] bg-transparent text-sm text-slate-800 dark:text-slate-100
-                                              outline-none placeholder-slate-400 py-0.5" />
+                                        placeholder="Type an office name, press Enter to stage it…"
+                                        class="flex-1 min-w-[200px] bg-transparent text-sm text-slate-800 dark:text-slate-100
+                                                                                      outline-none placeholder-slate-400 py-0.5" />
                                 </div>
 
                                 <template x-for="chip in chips" :key="chip">
@@ -351,7 +363,7 @@
                                     <button type="submit" :disabled="chips.length === 0"
                                         :class="chips.length === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:bg-indigo-700 active:scale-95 shadow shadow-indigo-500/30'"
                                         class="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-sm
-                                               font-semibold rounded-xl transition-all">
+                                                                                       font-semibold rounded-xl transition-all">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -365,9 +377,10 @@
 
                         {{-- Search + existing entries --}}
                         <div class="px-6 py-3 border-b border-slate-100 dark:border-slate-700" x-data="{ offSearch: '' }">
-                            <input type="text" x-model="offSearch" placeholder="Search offices…" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                      bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
-                                      text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
+                            <input type="text" x-model="offSearch" placeholder="Search offices…"
+                                class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
+                                                                              bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
+                                                                              text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
 
                             <div class="mt-3 max-h-64 overflow-y-auto -mx-3 divide-y divide-slate-50 dark:divide-slate-700/50"
                                 x-data>
@@ -384,9 +397,10 @@
                                             class="flex-1 flex items-center gap-2 pr-3" style="display:none">
                                             @csrf
                                             @method('PUT')
-                                            <input type="text" name="name" x-model="editVal" class="flex-1 px-2.5 py-1 rounded-lg border border-indigo-300 dark:border-indigo-600
-                                                          bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                          focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                                            <input type="text" name="name" x-model="editVal"
+                                                class="flex-1 px-2.5 py-1 rounded-lg border border-indigo-300 dark:border-indigo-600
+                                                                                                                      bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                      focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                                             <button type="submit"
                                                 class="px-2.5 py-1 text-xs font-semibold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">Save</button>
                                             <button type="button"
@@ -395,8 +409,9 @@
                                         </form>
 
                                         <div class="flex items-center gap-1 flex-shrink-0" x-show="!editing">
-                                            <button type="button" @click="editing = true" title="Edit" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-indigo-500 dark:hover:text-indigo-400
-                                                           hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
+                                            <button type="button" @click="editing = true" title="Edit"
+                                                class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-indigo-500 dark:hover:text-indigo-400
+                                                                                                                       hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
                                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                     stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -407,8 +422,9 @@
                                                 onsubmit="return confirm('Delete office &quot;{{ addslashes($office->name) }}&quot;?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" title="Delete" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
-                                                               hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                                <button type="submit" title="Delete"
+                                                    class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
+                                                                                                                           hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                         stroke-width="2.5">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -462,7 +478,8 @@
                                     <div
                                         class="mb-3 px-4 py-2.5 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700">
                                         <p class="text-xs font-semibold text-red-600 dark:text-red-400">
-                                            {{ $errors->first('last_name') }}</p>
+                                            {{ $errors->first('last_name') }}
+                                        </p>
                                     </div>
                                 @endif
 
@@ -475,8 +492,8 @@
                                         <input type="text" name="employee_number" value="{{ old('employee_number') }}"
                                             placeholder="e.g. 2024-001" required
                                             class="w-full px-3 py-2 rounded-xl border {{ $errors->has('employee_number') ? 'border-red-400 dark:border-red-500' : 'border-slate-200 dark:border-slate-600' }}
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                         @error('employee_number')
                                             <p class="mt-1 text-xs text-red-500 dark:text-red-400">{{ $message }}</p>
                                         @enderror
@@ -487,8 +504,8 @@
                                         <input type="text" name="last_name" value="{{ old('last_name') }}"
                                             placeholder="Dela Cruz" required
                                             class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Given
@@ -496,8 +513,8 @@
                                         <input type="text" name="given_name" value="{{ old('given_name') }}" placeholder="Juan"
                                             required
                                             class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                     </div>
                                 </div>
 
@@ -510,8 +527,8 @@
                                         <input type="text" name="middle_name" value="{{ old('middle_name') }}"
                                             placeholder="Santos"
                                             class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                     </div>
                                     <div>
                                         <label
@@ -519,8 +536,8 @@
                                             <span class="font-normal text-slate-400">(opt.)</span></label>
                                         <input type="text" name="suffix" value="{{ old('suffix') }}" placeholder="Jr."
                                             class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                     </div>
                                     <div class="relative">
                                         <label
@@ -529,8 +546,8 @@
                                         <input type="text" name="office" id="admin-emp-add-office" value="{{ old('office') }}"
                                             list="admin-office-list" autocomplete="off" required placeholder="Type or select…"
                                             class="w-full px-3 py-2 rounded-xl border {{ $errors->has('office') ? 'border-red-400 dark:border-red-500' : 'border-slate-200 dark:border-slate-600' }}
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                         <datalist id="admin-office-list">
                                             @foreach($offices as $office)
                                                 <option value="{{ $office->name }}">
@@ -548,8 +565,8 @@
                                             value="{{ old('position') }}" list="admin-position-list" autocomplete="off" required
                                             placeholder="Type or select…"
                                             class="w-full px-3 py-2 rounded-xl border {{ $errors->has('position') ? 'border-red-400 dark:border-red-500' : 'border-slate-200 dark:border-slate-600' }}
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                         <datalist id="admin-position-list">
                                             @foreach($positions as $pos)
                                                 <option value="{{ $pos->name }}">
@@ -562,9 +579,10 @@
                                 </div>
 
                                 <div class="flex justify-end">
-                                    <button type="submit" class="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white text-sm
-                                               font-semibold rounded-xl hover:bg-emerald-700 active:scale-95
-                                               shadow shadow-emerald-500/30 transition-all">
+                                    <button type="submit"
+                                        class="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white text-sm
+                                                                                       font-semibold rounded-xl hover:bg-emerald-700 active:scale-95
+                                                                                       shadow shadow-emerald-500/30 transition-all">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -578,24 +596,25 @@
                         {{-- Search + employee list --}}
                         <div class="px-6 py-3">
                             <input type="text" id="settingsEmpSearch" placeholder="Search employees…"
-                                oninput="settingsEmpPaginator && settingsEmpPaginator.search(this.value)" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                      bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
-                                      text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition mb-3" />
+                                oninput="settingsEmpPaginator && settingsEmpPaginator.search(this.value)"
+                                class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
+                                                                              bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
+                                                                              text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition mb-3" />
 
                             <div id="settingsEmpList" class="-mx-3 divide-y divide-slate-50 dark:divide-slate-700/50">
                                 @forelse($employees as $emp)
                                     <div class="px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors rounded-lg"
                                         data-search="{{ strtolower($emp->full_name . ' ' . $emp->employee_number . ' ' . $emp->position . ' ' . $emp->office) }}"
                                         x-data="{
-                                             editing: false,
-                                             editLast: '{{ addslashes($emp->last_name) }}',
-                                             editGiven: '{{ addslashes($emp->given_name) }}',
-                                             editMiddle: '{{ addslashes($emp->middle_name ?? '') }}',
-                                             editSuffix: '{{ addslashes($emp->suffix ?? '') }}',
-                                             editEmpNo: '{{ addslashes($emp->employee_number ?? '') }}',
-                                             editOffice: '{{ addslashes($emp->office ?? '') }}',
-                                             editPosition: '{{ addslashes($emp->position ?? '') }}',
-                                         }">
+                                                                                                         editing: false,
+                                                                                                         editLast: '{{ addslashes($emp->last_name) }}',
+                                                                                                         editGiven: '{{ addslashes($emp->given_name) }}',
+                                                                                                         editMiddle: '{{ addslashes($emp->middle_name ?? '') }}',
+                                                                                                         editSuffix: '{{ addslashes($emp->suffix ?? '') }}',
+                                                                                                         editEmpNo: '{{ addslashes($emp->employee_number ?? '') }}',
+                                                                                                         editOffice: '{{ addslashes($emp->office ?? '') }}',
+                                                                                                         editPosition: '{{ addslashes($emp->position ?? '') }}',
+                                                                                                     }">
 
                                         {{-- Display mode --}}
                                         <div x-show="!editing" class="flex items-center gap-3">
@@ -604,7 +623,7 @@
                                                     @if($emp->employee_number)
                                                         <span
                                                             class="flex-shrink-0 text-xs font-mono font-semibold px-1.5 py-0.5 rounded
-                                                                         bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
+                                                                                                                                                         bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
                                                             {{ $emp->employee_number }}
                                                         </span>
                                                     @endif
@@ -623,8 +642,9 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-1 flex-shrink-0">
-                                                <button type="button" @click="editing = true" title="Edit" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-emerald-500 dark:hover:text-emerald-400
-                                                               hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">
+                                                <button type="button" @click="editing = true" title="Edit"
+                                                    class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-emerald-500 dark:hover:text-emerald-400
+                                                                                                                           hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">
                                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                         stroke-width="2">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -636,8 +656,9 @@
                                                     onsubmit="return confirm('Delete employee &quot;{{ addslashes($emp->full_name) }}&quot;?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" title="Delete" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
-                                                                   hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                                    <button type="submit" title="Delete"
+                                                        class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
+                                                                                                                               hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                                                             stroke="currentColor" stroke-width="2.5">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -663,8 +684,8 @@
                                                         No.</label>
                                                     <input type="text" name="employee_number" x-model="editEmpNo"
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                              bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                              focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                                 <div>
                                                     <label
@@ -672,8 +693,8 @@
                                                         Name <span class="text-red-400">*</span></label>
                                                     <input type="text" name="last_name" x-model="editLast" required
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                              bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                              focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                                 <div>
                                                     <label
@@ -681,8 +702,8 @@
                                                         Name <span class="text-red-400">*</span></label>
                                                     <input type="text" name="given_name" x-model="editGiven" required
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                              bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                              focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                             </div>
 
@@ -693,16 +714,16 @@
                                                         Name</label>
                                                     <input type="text" name="middle_name" x-model="editMiddle"
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                              bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                              focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                                 <div>
                                                     <label
                                                         class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Suffix</label>
                                                     <input type="text" name="suffix" x-model="editSuffix"
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                              bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                              focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                                 <div class="relative">
                                                     <label
@@ -710,8 +731,8 @@
                                                     <input type="text" name="office" x-model="editOffice" list="admin-office-list"
                                                         autocomplete="off"
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                              bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                              focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                                 <div class="relative">
                                                     <label
@@ -719,8 +740,8 @@
                                                     <input type="text" name="position" x-model="editPosition"
                                                         list="admin-position-list" autocomplete="off"
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                              bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                              focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                             </div>
 
@@ -745,8 +766,9 @@
                             </div>
 
                             {{-- ══ Pagination Bar ══ --}}
-                            <div id="settingsEmpPaginationBar" class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 mt-4 pt-3
-                                    border-t border-slate-100 dark:border-slate-700 text-sm select-none">
+                            <div id="settingsEmpPaginationBar"
+                                class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 mt-4 pt-3
+                                                                            border-t border-slate-100 dark:border-slate-700 text-sm select-none">
 
                                 {{-- Left: items per page --}}
                                 <div
@@ -756,8 +778,8 @@
                                         <select id="settingsEmpPerPage"
                                             onchange="settingsEmpPaginator && settingsEmpPaginator.setPerPage(+this.value)"
                                             class="appearance-none pl-3 pr-7 py-1.5 rounded-lg border border-slate-200 dark:border-slate-600
-                                                   bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold
-                                                   focus:outline-none focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
+                                                                                           bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold
+                                                                                           focus:outline-none focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
                                             <option value="10">10</option>
                                             <option value="25" selected>25</option>
                                             <option value="50">50</option>
@@ -775,8 +797,9 @@
                                 <div class="flex items-center gap-1">
                                     {{-- First --}}
                                     <button id="settingsEmpBtnFirst"
-                                        onclick="settingsEmpPaginator && settingsEmpPaginator.first()" title="First page" class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20
-                                               disabled:opacity-30 disabled:pointer-events-none transition">
+                                        onclick="settingsEmpPaginator && settingsEmpPaginator.first()" title="First page"
+                                        class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20
+                                                                                       disabled:opacity-30 disabled:pointer-events-none transition">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -787,8 +810,8 @@
                                     <button id="settingsEmpBtnPrev"
                                         onclick="settingsEmpPaginator && settingsEmpPaginator.prev()" title="Previous page"
                                         class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-emerald-600 dark:text-emerald-400
-                                               hover:bg-emerald-50 dark:hover:bg-emerald-900/20
-                                               disabled:opacity-30 disabled:pointer-events-none transition text-xs font-semibold">
+                                                                                       hover:bg-emerald-50 dark:hover:bg-emerald-900/20
+                                                                                       disabled:opacity-30 disabled:pointer-events-none transition text-xs font-semibold">
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -800,8 +823,8 @@
                                         <input id="settingsEmpPageInput" type="number" min="1"
                                             onchange="settingsEmpPaginator && settingsEmpPaginator.goTo(+this.value)"
                                             class="w-12 text-center rounded-lg border border-slate-200 dark:border-slate-600
-                                                  bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200
-                                                  text-xs font-semibold py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                          bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200
+                                                                                          text-xs font-semibold py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                         <span class="text-xs text-slate-400 whitespace-nowrap">of <span
                                                 id="settingsEmpTotalPages">1</span></span>
                                     </div>
@@ -809,8 +832,8 @@
                                     <button id="settingsEmpBtnNext"
                                         onclick="settingsEmpPaginator && settingsEmpPaginator.next()" title="Next page"
                                         class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-emerald-600 dark:text-emerald-400
-                                               hover:bg-emerald-50 dark:hover:bg-emerald-900/20
-                                               disabled:opacity-30 disabled:pointer-events-none transition text-xs font-semibold">
+                                                                                       hover:bg-emerald-50 dark:hover:bg-emerald-900/20
+                                                                                       disabled:opacity-30 disabled:pointer-events-none transition text-xs font-semibold">
                                         Next
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
@@ -819,8 +842,9 @@
                                     </button>
                                     {{-- Last --}}
                                     <button id="settingsEmpBtnLast"
-                                        onclick="settingsEmpPaginator && settingsEmpPaginator.last()" title="Last page" class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20
-                                               disabled:opacity-30 disabled:pointer-events-none transition">
+                                        onclick="settingsEmpPaginator && settingsEmpPaginator.last()" title="Last page"
+                                        class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20
+                                                                                       disabled:opacity-30 disabled:pointer-events-none transition">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -880,7 +904,8 @@
                                     <div
                                         class="mb-3 px-4 py-2.5 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700">
                                         <p class="text-xs font-semibold text-red-600 dark:text-red-400">
-                                            {{ $errors->first('last_name') }}</p>
+                                            {{ $errors->first('last_name') }}
+                                        </p>
                                     </div>
                                 @endif
 
@@ -893,8 +918,8 @@
                                         <input type="text" name="employee_number" value="{{ old('employee_number') }}"
                                             placeholder="e.g. 2024-001" required
                                             class="w-full px-3 py-2 rounded-xl border {{ $errors->has('employee_number') ? 'border-red-400 dark:border-red-500' : 'border-slate-200 dark:border-slate-600' }}
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                         @error('employee_number')
                                             <p class="mt-1 text-xs text-red-500 dark:text-red-400">{{ $message }}</p>
                                         @enderror
@@ -905,8 +930,8 @@
                                         <input type="text" name="last_name" value="{{ old('last_name') }}"
                                             placeholder="Dela Cruz" required
                                             class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Given
@@ -914,8 +939,8 @@
                                         <input type="text" name="given_name" value="{{ old('given_name') }}" placeholder="Juan"
                                             required
                                             class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                     </div>
                                 </div>
 
@@ -924,12 +949,12 @@
                                     <div>
                                         <label
                                             class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Middle
-                                            Name <span class="font-normal text-slate-400">(opt.)</span></label>
+                                            Initial <span class="font-normal text-slate-400">(opt.)</span></label>
                                         <input type="text" name="middle_name" value="{{ old('middle_name') }}"
                                             placeholder="Santos"
                                             class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                     </div>
                                     <div>
                                         <label
@@ -937,8 +962,8 @@
                                             <span class="font-normal text-slate-400">(opt.)</span></label>
                                         <input type="text" name="suffix" value="{{ old('suffix') }}" placeholder="Jr."
                                             class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                     </div>
                                     <div class="relative">
                                         <label
@@ -947,8 +972,8 @@
                                         <input type="text" name="office" id="emp-add-office-emp" value="{{ old('office') }}"
                                             list="office-list-emp" autocomplete="off" required placeholder="Type or select…"
                                             class="w-full px-3 py-2 rounded-xl border {{ $errors->has('office') ? 'border-red-400 dark:border-red-500' : 'border-slate-200 dark:border-slate-600' }}
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                         <datalist id="office-list-emp">
                                             @foreach($offices as $office)
                                                 <option value="{{ $office->name }}">
@@ -966,8 +991,8 @@
                                             value="{{ old('position') }}" list="position-list-emp" autocomplete="off" required
                                             placeholder="Type or select…"
                                             class="w-full px-3 py-2 rounded-xl border {{ $errors->has('position') ? 'border-red-400 dark:border-red-500' : 'border-slate-200 dark:border-slate-600' }}
-                                                  bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
+                                                                                          bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition placeholder-slate-400" />
                                         <datalist id="position-list-emp">
                                             @foreach($positions as $pos)
                                                 <option value="{{ $pos->name }}">
@@ -980,9 +1005,10 @@
                                 </div>
 
                                 <div class="flex justify-end">
-                                    <button type="submit" class="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white text-sm
-                                               font-semibold rounded-xl hover:bg-emerald-700 active:scale-95
-                                               shadow shadow-emerald-500/30 transition-all">
+                                    <button type="submit"
+                                        class="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white text-sm
+                                                                                       font-semibold rounded-xl hover:bg-emerald-700 active:scale-95
+                                                                                       shadow shadow-emerald-500/30 transition-all">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -996,24 +1022,25 @@
                         {{-- Search + employee list --}}
                         <div class="px-6 py-3">
                             <input type="text" id="settingsEmpSearch" placeholder="Search employees…"
-                                oninput="settingsEmpPaginator && settingsEmpPaginator.search(this.value)" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                      bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
-                                      text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition mb-3" />
+                                oninput="settingsEmpPaginator && settingsEmpPaginator.search(this.value)"
+                                class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
+                                                                              bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
+                                                                              text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition mb-3" />
 
                             <div id="settingsEmpList" class="-mx-3 divide-y divide-slate-50 dark:divide-slate-700/50">
                                 @forelse($employees as $emp)
                                     <div class="px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors rounded-lg"
                                         data-search="{{ strtolower($emp->full_name . ' ' . $emp->employee_number . ' ' . $emp->position . ' ' . $emp->office) }}"
                                         x-data="{
-                                             editing: false,
-                                             editLast: '{{ addslashes($emp->last_name) }}',
-                                             editGiven: '{{ addslashes($emp->given_name) }}',
-                                             editMiddle: '{{ addslashes($emp->middle_name ?? '') }}',
-                                             editSuffix: '{{ addslashes($emp->suffix ?? '') }}',
-                                             editEmpNo: '{{ addslashes($emp->employee_number ?? '') }}',
-                                             editOffice: '{{ addslashes($emp->office ?? '') }}',
-                                             editPosition: '{{ addslashes($emp->position ?? '') }}',
-                                         }">
+                                                                                                     editing: false,
+                                                                                                     editLast: '{{ addslashes($emp->last_name) }}',
+                                                                                                     editGiven: '{{ addslashes($emp->given_name) }}',
+                                                                                                     editMiddle: '{{ addslashes($emp->middle_name ?? '') }}',
+                                                                                                     editSuffix: '{{ addslashes($emp->suffix ?? '') }}',
+                                                                                                     editEmpNo: '{{ addslashes($emp->employee_number ?? '') }}',
+                                                                                                     editOffice: '{{ addslashes($emp->office ?? '') }}',
+                                                                                                     editPosition: '{{ addslashes($emp->position ?? '') }}',
+                                                                                                 }">
 
                                         {{-- Display mode --}}
                                         <div x-show="!editing" class="flex items-center gap-3">
@@ -1022,7 +1049,7 @@
                                                     @if($emp->employee_number)
                                                         <span
                                                             class="flex-shrink-0 text-xs font-mono font-semibold px-1.5 py-0.5 rounded
-                                                                         bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
+                                                                                                                                                 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
                                                             {{ $emp->employee_number }}
                                                         </span>
                                                     @endif
@@ -1041,8 +1068,9 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-1 flex-shrink-0">
-                                                <button type="button" @click="editing = true" title="Edit" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-emerald-500 dark:hover:text-emerald-400
-                                                               hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">
+                                                <button type="button" @click="editing = true" title="Edit"
+                                                    class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-emerald-500 dark:hover:text-emerald-400
+                                                                                                                       hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">
                                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                         stroke-width="2">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -1054,8 +1082,9 @@
                                                     onsubmit="return confirm('Delete employee &quot;{{ addslashes($emp->full_name) }}&quot;?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" title="Delete" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
-                                                                   hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                                    <button type="submit" title="Delete"
+                                                        class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
+                                                                                                                           hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                                                             stroke="currentColor" stroke-width="2.5">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -1081,8 +1110,8 @@
                                                         No.</label>
                                                     <input type="text" name="employee_number" x-model="editEmpNo"
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                          bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                                 <div>
                                                     <label
@@ -1090,8 +1119,8 @@
                                                         Name <span class="text-red-400">*</span></label>
                                                     <input type="text" name="last_name" x-model="editLast" required
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                          bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                                 <div>
                                                     <label
@@ -1099,8 +1128,8 @@
                                                         Name <span class="text-red-400">*</span></label>
                                                     <input type="text" name="given_name" x-model="editGiven" required
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                          bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                             </div>
 
@@ -1108,19 +1137,19 @@
                                                 <div>
                                                     <label
                                                         class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Middle
-                                                        Name</label>
+                                                        Initial</label>
                                                     <input type="text" name="middle_name" x-model="editMiddle"
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                          bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                                 <div>
                                                     <label
                                                         class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Suffix</label>
                                                     <input type="text" name="suffix" x-model="editSuffix"
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                          bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                                 <div class="relative">
                                                     <label
@@ -1128,8 +1157,8 @@
                                                     <input type="text" name="office" x-model="editOffice" list="office-list-emp"
                                                         autocomplete="off"
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                          bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                                 <div class="relative">
                                                     <label
@@ -1137,8 +1166,8 @@
                                                     <input type="text" name="position" x-model="editPosition"
                                                         list="position-list-emp" autocomplete="off"
                                                         class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
-                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                                  focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                                                          bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                          focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                                 </div>
                                             </div>
 
@@ -1163,8 +1192,9 @@
                             </div>
 
                             {{-- ══ Pagination Bar ══ --}}
-                            <div id="settingsEmpPaginationBar" class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 mt-4 pt-3
-                                    border-t border-slate-100 dark:border-slate-700 text-sm select-none">
+                            <div id="settingsEmpPaginationBar"
+                                class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 mt-4 pt-3
+                                                                            border-t border-slate-100 dark:border-slate-700 text-sm select-none">
 
                                 {{-- Left: items per page --}}
                                 <div
@@ -1174,8 +1204,8 @@
                                         <select id="settingsEmpPerPage"
                                             onchange="settingsEmpPaginator && settingsEmpPaginator.setPerPage(+this.value)"
                                             class="appearance-none pl-3 pr-7 py-1.5 rounded-lg border border-slate-200 dark:border-slate-600
-                                                   bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold
-                                                   focus:outline-none focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
+                                                                                           bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold
+                                                                                           focus:outline-none focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
                                             <option value="10">10</option>
                                             <option value="25" selected>25</option>
                                             <option value="50">50</option>
@@ -1193,8 +1223,9 @@
                                 <div class="flex items-center gap-1">
                                     {{-- First --}}
                                     <button id="settingsEmpBtnFirst"
-                                        onclick="settingsEmpPaginator && settingsEmpPaginator.first()" title="First page" class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20
-                                               disabled:opacity-30 disabled:pointer-events-none transition">
+                                        onclick="settingsEmpPaginator && settingsEmpPaginator.first()" title="First page"
+                                        class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20
+                                                                                       disabled:opacity-30 disabled:pointer-events-none transition">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -1205,8 +1236,8 @@
                                     <button id="settingsEmpBtnPrev"
                                         onclick="settingsEmpPaginator && settingsEmpPaginator.prev()" title="Previous page"
                                         class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-emerald-600 dark:text-emerald-400
-                                               hover:bg-emerald-50 dark:hover:bg-emerald-900/20
-                                               disabled:opacity-30 disabled:pointer-events-none transition text-xs font-semibold">
+                                                                                       hover:bg-emerald-50 dark:hover:bg-emerald-900/20
+                                                                                       disabled:opacity-30 disabled:pointer-events-none transition text-xs font-semibold">
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -1218,8 +1249,8 @@
                                         <input id="settingsEmpPageInput" type="number" min="1"
                                             onchange="settingsEmpPaginator && settingsEmpPaginator.goTo(+this.value)"
                                             class="w-12 text-center rounded-lg border border-slate-200 dark:border-slate-600
-                                                  bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200
-                                                  text-xs font-semibold py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                                                                                          bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200
+                                                                                          text-xs font-semibold py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
                                         <span class="text-xs text-slate-400 whitespace-nowrap">of <span
                                                 id="settingsEmpTotalPages">1</span></span>
                                     </div>
@@ -1227,8 +1258,8 @@
                                     <button id="settingsEmpBtnNext"
                                         onclick="settingsEmpPaginator && settingsEmpPaginator.next()" title="Next page"
                                         class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-emerald-600 dark:text-emerald-400
-                                               hover:bg-emerald-50 dark:hover:bg-emerald-900/20
-                                               disabled:opacity-30 disabled:pointer-events-none transition text-xs font-semibold">
+                                                                                       hover:bg-emerald-50 dark:hover:bg-emerald-900/20
+                                                                                       disabled:opacity-30 disabled:pointer-events-none transition text-xs font-semibold">
                                         Next
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
@@ -1237,8 +1268,9 @@
                                     </button>
                                     {{-- Last --}}
                                     <button id="settingsEmpBtnLast"
-                                        onclick="settingsEmpPaginator && settingsEmpPaginator.last()" title="Last page" class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20
-                                               disabled:opacity-30 disabled:pointer-events-none transition">
+                                        onclick="settingsEmpPaginator && settingsEmpPaginator.last()" title="Last page"
+                                        class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20
+                                                                                       disabled:opacity-30 disabled:pointer-events-none transition">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -1284,16 +1316,18 @@
                                 {{-- Staged pairs --}}
                                 <div class="space-y-1.5 mb-3" x-show="pairs.length > 0">
                                     <template x-for="(pair, idx) in pairs" :key="idx">
-                                        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg
-                                                bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
+                                        <div
+                                            class="flex items-center gap-2 px-3 py-1.5 rounded-lg
+                                                                                        bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
                                             <span
                                                 class="text-xs font-mono font-semibold text-blue-500 dark:text-blue-400 min-w-[60px]"
                                                 x-text="pair.code || '—'"></span>
                                             <span class="text-xs text-slate-700 dark:text-slate-200 flex-1"
                                                 x-text="pair.name"></span>
-                                            <button type="button" @click="removePair(idx)" class="w-4 h-4 rounded-full flex items-center justify-center
-                                                       text-blue-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20
-                                                       transition-colors font-bold leading-none text-xs">×</button>
+                                            <button type="button" @click="removePair(idx)"
+                                                class="w-4 h-4 rounded-full flex items-center justify-center
+                                                                                               text-blue-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20
+                                                                                               transition-colors font-bold leading-none text-xs">×</button>
                                         </div>
                                     </template>
                                 </div>
@@ -1304,17 +1338,18 @@
                                         @keydown.enter.prevent="addPair()" @keydown.tab.prevent="$refs.nameInput.focus()"
                                         placeholder="Position Code…"
                                         class="w-36 flex-shrink-0 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                              bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                              focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder-slate-400" />
+                                                                                      bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                      focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder-slate-400" />
                                     <input type="text" x-ref="nameInput" x-model="currentName"
                                         @keydown.enter.prevent="addPair()" placeholder="Position…"
                                         class="flex-1 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                              bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                              focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder-slate-400" />
-                                    <button type="button" @click="addPair()" class="flex items-center gap-1.5 px-4 py-2 bg-slate-100 dark:bg-slate-700
-                                               text-slate-600 dark:text-slate-300 text-sm font-semibold rounded-xl
-                                               hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-300
-                                               border border-slate-200 dark:border-slate-600 transition-all active:scale-95">
+                                                                                      bg-slate-50 dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                      focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder-slate-400" />
+                                    <button type="button" @click="addPair()"
+                                        class="flex items-center gap-1.5 px-4 py-2 bg-slate-100 dark:bg-slate-700
+                                                                                       text-slate-600 dark:text-slate-300 text-sm font-semibold rounded-xl
+                                                                                       hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-300
+                                                                                       border border-slate-200 dark:border-slate-600 transition-all active:scale-95">
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -1344,7 +1379,7 @@
                                     <button type="submit" :disabled="pairs.length === 0"
                                         :class="pairs.length === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:bg-blue-700 active:scale-95 shadow shadow-blue-500/30'"
                                         class="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white text-sm
-                                               font-semibold rounded-xl transition-all">
+                                                                                       font-semibold rounded-xl transition-all">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -1358,9 +1393,10 @@
 
                         {{-- Search + existing entries --}}
                         <div class="px-6 py-3 border-b border-slate-100 dark:border-slate-700" x-data="{ posSearch: '' }">
-                            <input type="text" x-model="posSearch" placeholder="Search positions…" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                      bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
-                                      text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
+                            <input type="text" x-model="posSearch" placeholder="Search positions…"
+                                class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
+                                                                              bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
+                                                                              text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
 
                             <div class="mt-3 max-h-64 overflow-y-auto -mx-3 divide-y divide-slate-50 dark:divide-slate-700/50"
                                 x-data>
@@ -1374,7 +1410,7 @@
                                             @if($pos->code)
                                                 <span
                                                     class="flex-shrink-0 text-xs font-mono font-semibold px-1.5 py-0.5 rounded
-                                                                 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">{{ $pos->code }}</span>
+                                                                                                                                         bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">{{ $pos->code }}</span>
                                             @endif
                                             <span class="text-sm text-slate-700 dark:text-slate-300 truncate"
                                                 x-text="editName"></span>
@@ -1386,12 +1422,14 @@
                                             class="flex-1 flex items-center gap-2 pr-3" style="display:none">
                                             @csrf
                                             @method('PUT')
-                                            <input type="text" name="code" x-model="editCode" placeholder="Code" class="w-28 flex-shrink-0 px-2.5 py-1 rounded-lg border border-blue-300 dark:border-blue-600
-                                                          bg-white dark:bg-slate-700 text-sm font-mono text-slate-800 dark:text-slate-100
-                                                          focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                            <input type="text" name="name" x-model="editName" class="flex-1 px-2.5 py-1 rounded-lg border border-blue-300 dark:border-blue-600
-                                                          bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                          focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <input type="text" name="code" x-model="editCode" placeholder="Code"
+                                                class="w-28 flex-shrink-0 px-2.5 py-1 rounded-lg border border-blue-300 dark:border-blue-600
+                                                                                                                  bg-white dark:bg-slate-700 text-sm font-mono text-slate-800 dark:text-slate-100
+                                                                                                                  focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <input type="text" name="name" x-model="editName"
+                                                class="flex-1 px-2.5 py-1 rounded-lg border border-blue-300 dark:border-blue-600
+                                                                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                  focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <button type="submit"
                                                 class="px-2.5 py-1 text-xs font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Save</button>
                                             <button type="button"
@@ -1401,8 +1439,9 @@
 
                                         {{-- Actions --}}
                                         <div class="flex items-center gap-1 flex-shrink-0" x-show="!editing">
-                                            <button type="button" @click="editing = true" title="Edit" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-blue-500 dark:hover:text-blue-400
-                                                           hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+                                            <button type="button" @click="editing = true" title="Edit"
+                                                class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-blue-500 dark:hover:text-blue-400
+                                                                                                                   hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
                                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                     stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -1413,8 +1452,9 @@
                                                 onsubmit="return confirm('Delete position &quot;{{ addslashes($pos->name) }}&quot;?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" title="Delete" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
-                                                               hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                                <button type="submit" title="Delete"
+                                                    class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
+                                                                                                                       hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                         stroke-width="2.5">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -1463,22 +1503,24 @@
                                 @csrf
 
                                 <div class="w-full min-h-[44px] px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                        bg-slate-50 dark:bg-slate-700 flex flex-wrap gap-1.5 items-center cursor-text mb-3"
+                                                                                bg-slate-50 dark:bg-slate-700 flex flex-wrap gap-1.5 items-center cursor-text mb-3"
                                     @click="$refs.chipInput.focus()">
                                     <template x-for="chip in chips" :key="chip">
                                         <span class="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-lg
-                                                 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300
-                                                 text-xs font-medium select-none">
+                                                                                         bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300
+                                                                                         text-xs font-medium select-none">
                                             <span x-text="chip"></span>
-                                            <button type="button" @click.stop="remove(chip)" class="w-3.5 h-3.5 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800
-                                                       flex items-center justify-center text-indigo-500 hover:text-red-500
-                                                       transition-colors font-bold leading-none">×</button>
+                                            <button type="button" @click.stop="remove(chip)"
+                                                class="w-3.5 h-3.5 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800
+                                                                                               flex items-center justify-center text-indigo-500 hover:text-red-500
+                                                                                               transition-colors font-bold leading-none">×</button>
                                         </span>
                                     </template>
                                     <input type="text" x-ref="chipInput" x-model="current" @keydown.enter.prevent="add()"
                                         @keydown.","="add(); $event.preventDefault()"
-                                        placeholder="Type an office name, press Enter to stage it…" class="flex-1 min-w-[200px] bg-transparent text-sm text-slate-800 dark:text-slate-100
-                                              outline-none placeholder-slate-400 py-0.5" />
+                                        placeholder="Type an office name, press Enter to stage it…"
+                                        class="flex-1 min-w-[200px] bg-transparent text-sm text-slate-800 dark:text-slate-100
+                                                                                      outline-none placeholder-slate-400 py-0.5" />
                                 </div>
 
                                 <template x-for="chip in chips" :key="chip">
@@ -1497,7 +1539,7 @@
                                     <button type="submit" :disabled="chips.length === 0"
                                         :class="chips.length === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:bg-indigo-700 active:scale-95 shadow shadow-indigo-500/30'"
                                         class="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-sm
-                                               font-semibold rounded-xl transition-all">
+                                                                                       font-semibold rounded-xl transition-all">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -1511,9 +1553,10 @@
 
                         {{-- Search + existing entries --}}
                         <div class="px-6 py-3 border-b border-slate-100 dark:border-slate-700" x-data="{ offSearch: '' }">
-                            <input type="text" x-model="offSearch" placeholder="Search offices…" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                      bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
-                                      text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
+                            <input type="text" x-model="offSearch" placeholder="Search offices…"
+                                class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600
+                                                                              bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
+                                                                              text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
 
                             <div class="mt-3 max-h-64 overflow-y-auto -mx-3 divide-y divide-slate-50 dark:divide-slate-700/50"
                                 x-data>
@@ -1530,9 +1573,10 @@
                                             class="flex-1 flex items-center gap-2 pr-3" style="display:none">
                                             @csrf
                                             @method('PUT')
-                                            <input type="text" name="name" x-model="editVal" class="flex-1 px-2.5 py-1 rounded-lg border border-indigo-300 dark:border-indigo-600
-                                                          bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
-                                                          focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                                            <input type="text" name="name" x-model="editVal"
+                                                class="flex-1 px-2.5 py-1 rounded-lg border border-indigo-300 dark:border-indigo-600
+                                                                                                                  bg-white dark:bg-slate-700 text-sm text-slate-800 dark:text-slate-100
+                                                                                                                  focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                                             <button type="submit"
                                                 class="px-2.5 py-1 text-xs font-semibold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">Save</button>
                                             <button type="button"
@@ -1541,8 +1585,9 @@
                                         </form>
 
                                         <div class="flex items-center gap-1 flex-shrink-0" x-show="!editing">
-                                            <button type="button" @click="editing = true" title="Edit" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-indigo-500 dark:hover:text-indigo-400
-                                                           hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
+                                            <button type="button" @click="editing = true" title="Edit"
+                                                class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-indigo-500 dark:hover:text-indigo-400
+                                                                                                                   hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
                                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                     stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -1553,8 +1598,9 @@
                                                 onsubmit="return confirm('Delete office &quot;{{ addslashes($office->name) }}&quot;?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" title="Delete" class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
-                                                               hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                                <button type="submit" title="Delete"
+                                                    class="p-1.5 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400
+                                                                                                                       hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                         stroke-width="2.5">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -1615,32 +1661,34 @@
                                         d="M21 21l-4.35-4.35M17 11A6 6 0 105 11a6 6 0 0012 0z" />
                                 </svg>
                                 <input type="text" x-model="search" @input="selectedUser = null; selectedRole = ''"
-                                    placeholder="Search user by name…" class="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600
-                                          bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
-                                          text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition" />
+                                    placeholder="Search user by name…"
+                                    class="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600
+                                                                              bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100
+                                                                              text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition" />
                             </div>
                         </div>
 
                         {{-- User list --}}
                         <div class="px-6 pb-2 max-h-40 overflow-y-auto divide-y divide-slate-50 dark:divide-slate-700/50">
                             <template x-for="user in filteredUsers" :key="user.id">
-                                <button type="button" @click="selectUser(user)" :class="selectedUser && selectedUser.id === user.id
-                                        ? 'bg-violet-50 dark:bg-violet-900/20 border-violet-200 dark:border-violet-700'
-                                        : 'hover:bg-slate-50 dark:hover:bg-slate-700/30 border-transparent'"
+                                <button type="button" @click="selectUser(user)"
+                                    :class="selectedUser && selectedUser.id === user.id
+                                                                            ? 'bg-violet-50 dark:bg-violet-900/20 border-violet-200 dark:border-violet-700'
+                                                                            : 'hover:bg-slate-50 dark:hover:bg-slate-700/30 border-transparent'"
                                     class="w-full flex items-center gap-3 px-3 py-2 rounded-xl border transition-colors text-left">
                                     {{-- Avatar --}}
                                     <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold"
                                         :class="selectedUser && selectedUser.id === user.id
-                                         ? 'bg-violet-600 text-white'
-                                         : 'bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300'">
+                                                                             ? 'bg-violet-600 text-white'
+                                                                             : 'bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300'">
                                         <span x-text="user.initials"></span>
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-medium text-slate-700 dark:text-slate-200 truncate"
                                             x-text="user.display_name"></p>
                                         <p class="text-xs" :class="user.role === 'admin'
-                                           ? 'text-violet-500 dark:text-violet-400'
-                                           : 'text-slate-400 dark:text-slate-500'"
+                                                                               ? 'text-violet-500 dark:text-violet-400'
+                                                                               : 'text-slate-400 dark:text-slate-500'"
                                             x-text="user.role === 'admin' ? 'Super Admin' : 'Employee'"></p>
                                     </div>
                                     {{-- Current badge --}}
@@ -1670,8 +1718,8 @@
                                 {{-- Super Admin --}}
                                 <label
                                     :class="selectedRole === 'admin'
-                                            ? 'ring-2 ring-violet-500 border-violet-300 dark:border-violet-600 bg-violet-50 dark:bg-violet-900/20'
-                                            : 'border-slate-200 dark:border-slate-600 hover:border-violet-300 dark:hover:border-violet-600 cursor-pointer'"
+                                                                                ? 'ring-2 ring-violet-500 border-violet-300 dark:border-violet-600 bg-violet-50 dark:bg-violet-900/20'
+                                                                                : 'border-slate-200 dark:border-slate-600 hover:border-violet-300 dark:hover:border-violet-600 cursor-pointer'"
                                     class="flex items-start gap-2 p-3 rounded-xl border transition-all">
                                     <input type="radio" name="role_pick" value="admin" x-model="selectedRole"
                                         class="mt-0.5 accent-violet-600 w-4 h-4 flex-shrink-0" />
@@ -1685,8 +1733,8 @@
                                 {{-- Employee --}}
                                 <label
                                     :class="selectedRole === 'employee'
-                                            ? 'ring-2 ring-blue-500 border-blue-300 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                                            : 'border-slate-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-blue-600 cursor-pointer'"
+                                                                                ? 'ring-2 ring-blue-500 border-blue-300 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/20'
+                                                                                : 'border-slate-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-blue-600 cursor-pointer'"
                                     class="flex items-start gap-2 p-3 rounded-xl border transition-all">
                                     <input type="radio" name="role_pick" value="employee" x-model="selectedRole"
                                         class="mt-0.5 accent-blue-600 w-4 h-4 flex-shrink-0" />
@@ -1707,8 +1755,8 @@
                                     <button type="submit"
                                         :disabled="!selectedRole || (selectedUser && selectedUser.role === selectedRole)"
                                         :class="(!selectedRole || (selectedUser && selectedUser.role === selectedRole))
-                                            ? 'bg-slate-100 dark:bg-slate-700/50 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-200 dark:border-slate-700'
-                                            : 'bg-violet-600 text-white border border-transparent hover:bg-violet-700 active:scale-95 shadow shadow-violet-500/30'"
+                                                                                ? 'bg-slate-100 dark:bg-slate-700/50 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-200 dark:border-slate-700'
+                                                                                : 'bg-violet-600 text-white border border-transparent hover:bg-violet-700 active:scale-95 shadow shadow-violet-500/30'"
                                         class="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-xl transition-all w-full justify-center">
                                         Save Action
                                     </button>
@@ -1745,7 +1793,7 @@
                                 Password</label>
                             <input type="password" name="password" autocomplete="new-password"
                                 class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700
-                                      text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
+                                                          text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
                             @error('password')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
                         </div>
 
@@ -1755,7 +1803,7 @@
                                 New Password</label>
                             <input type="password" name="password_confirmation" autocomplete="new-password"
                                 class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700
-                                      text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
+                                                          text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
                         </div>
 
                         <button type="submit"

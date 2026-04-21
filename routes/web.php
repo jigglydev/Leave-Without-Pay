@@ -365,6 +365,9 @@ Route::middleware('auth')->group(function () {
              $records = $records->filter(fn($r) => $r->created_by === auth()->id());
         }
         $preparedBy = auth()->user();
+        $certifierName = $request->input('certifier_name');
+        $certifierPosition = $request->input('certifier_position');
+        $leaveTypes = $request->input('leave_types');
         
         \App\Models\ActivityLog::log(
             'pdf_generated',
@@ -372,7 +375,13 @@ Route::middleware('auth')->group(function () {
             ['count' => $records->count()]
         );
 
-        return view('admin.recorded_entries_export_pdf', compact('records', 'preparedBy'));
+        return view('admin.recorded_entries_export_pdf', compact(
+            'records',
+            'preparedBy',
+            'certifierName',
+            'certifierPosition',
+            'leaveTypes'
+        ));
     })->name('admin.recorded-entries.export-pdf');
 
     // Export Excel (CSV)

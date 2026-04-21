@@ -296,6 +296,19 @@
             <span id="entryCountBadge" class="text-xs text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full font-medium">
                 {{ $records->count() }} {{ Str::plural('entry', $records->count()) }}
             </span>
+            <span id="selectedEntryCountBadge"
+                  class="hidden text-xs text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-full font-medium">
+                0 selected
+            </span>
+
+            <button type="button"
+                    onclick="openGenerateRecordsModal()"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/40 text-xs font-semibold shadow-sm transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                </svg>
+                Generate Records
+            </button>
             
             <div x-data="{ reportOpen: false }" class="relative">
                 <button @click="reportOpen = !reportOpen" @click.away="reportOpen = false"
@@ -344,7 +357,15 @@
         <table id="entriesTable" class="w-full text-xs border-collapse">
             <thead>
                 <tr class="bg-slate-50 dark:bg-slate-700/40">
-                    <th rowspan="3" class="border border-slate-200 dark:border-slate-600 px-4 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide align-middle min-w-[160px]">NAME</th>
+                    <th rowspan="3" class="border border-slate-200 dark:border-slate-600 px-4 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide align-middle min-w-[190px]">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox"
+                                   id="selectAllEntries"
+                                   onchange="toggleAllVisibleEntries(this)"
+                                   class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                            <span>Name</span>
+                        </label>
+                    </th>
                     <th rowspan="3" class="border border-slate-200 dark:border-slate-600 px-4 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide align-middle min-w-[120px]">POSITION</th>
                     <th rowspan="3" class="border border-slate-200 dark:border-slate-600 px-4 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide align-middle min-w-[120px]">OFFICE</th>
                     <th colspan="2" class="border border-slate-200 dark:border-slate-600 px-4 py-2 text-center text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide">
@@ -390,10 +411,18 @@
                     data-created-by="{{ $rec->created_by }}"
                     class="hover:bg-slate-50 dark:hover:bg-slate-700/20 transition-colors">
                     <td class="border border-slate-100 dark:border-slate-700 px-4 py-3">
-                        <p class="font-medium text-slate-800 dark:text-slate-100">{{ $displayName }}</p>
-                        @if($rec->as_of_date)
-                            <p class="text-[10px] text-slate-400 mt-0.5">As of {{ $rec->as_of_date->format('M d, Y') }}</p>
-                        @endif
+                        <label class="flex items-start gap-3">
+                            <input type="checkbox"
+                                   class="entry-select-checkbox mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                                   value="{{ $rec->id }}"
+                                   onchange="updateSelectedEntryState()">
+                            <span>
+                                <p class="font-medium text-slate-800 dark:text-slate-100">{{ $displayName }}</p>
+                                @if($rec->as_of_date)
+                                    <p class="text-[10px] text-slate-400 mt-0.5">As of {{ $rec->as_of_date->format('M d, Y') }}</p>
+                                @endif
+                            </span>
+                        </label>
                     </td>
                     <td class="border border-slate-100 dark:border-slate-700 px-4 py-3 text-slate-600 dark:text-slate-300">{{ $displayPosition ?: '—' }}</td>
                     <td class="border border-slate-100 dark:border-slate-700 px-4 py-3 text-slate-600 dark:text-slate-300">{{ $displayOffice ?: '—' }}</td>
@@ -622,17 +651,35 @@ const PDF_BASE_ROUTES = @json(
     $records->mapWithKeys(fn($r) => [$r->id => route('admin.recorded-entries.pdf', $r->id)])
 );
 let _activePdfRecordId = null;
+let _pdfModalMode = 'single';
 
-function openPdfModal(recordId) {
-    _activePdfRecordId = recordId;
+function resetPdfModal() {
     document.getElementById('certifierInput').value = '';
     document.getElementById('certifierPosition').value = '';
     document.getElementById('certifierDropdown').style.display = 'none';
-    // Reset checkboxes
     ['lt_leave_of_absence','lt_undertime','lt_tardy','lt_unauthorized'].forEach(id => {
         document.getElementById(id).checked = false;
     });
     document.getElementById('leaveTypeError').style.display = 'none';
+}
+
+function openPdfModal(recordId) {
+    _pdfModalMode = 'single';
+    _activePdfRecordId = recordId;
+    resetPdfModal();
+    document.getElementById('pdfModal').style.display = 'flex';
+}
+
+function openGenerateRecordsModal() {
+    const ids = getTargetEntryIds();
+    if (ids.length === 0) {
+        alert('No records available to generate.');
+        return;
+    }
+
+    _pdfModalMode = 'bulk';
+    _activePdfRecordId = null;
+    resetPdfModal();
     document.getElementById('pdfModal').style.display = 'flex';
 }
 
@@ -640,6 +687,7 @@ function closePdfModal() {
     document.getElementById('pdfModal').style.display = 'none';
     document.getElementById('certifierDropdown').style.display = 'none';
     _activePdfRecordId = null;
+    _pdfModalMode = 'single';
 }
 
 function showCertifierDropdown() {
@@ -672,17 +720,56 @@ function selectCertifier(name, position) {
     document.getElementById('certifierDropdown').style.display = 'none';
 }
 
+function getSelectedLeaveTypes() {
+    const leaveTypeIds = ['lt_leave_of_absence','lt_undertime','lt_tardy','lt_unauthorized'];
+    return leaveTypeIds
+        .filter(id => document.getElementById(id).checked)
+        .map(id => document.getElementById(id).value);
+}
+
+function getTargetEntryIds() {
+    let ids = getSelectedEntryIds();
+
+    if (ids.length === 0) {
+        ids = getVisibleEntryRows().map(row => row.dataset.id);
+    }
+
+    return ids;
+}
+
+function submitGeneratedRecords(ids, name, pos, leaveTypes) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{{ route("admin.recorded-entries.export-pdf") }}';
+    form.target = '_blank';
+
+    const fields = {
+        _token: '{{ csrf_token() }}',
+        ids: ids.join(','),
+        certifier_name: name,
+        certifier_position: pos,
+        leave_types: leaveTypes,
+    };
+
+    Object.entries(fields).forEach(([key, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+}
+
 function confirmPdf() {
-    if (!_activePdfRecordId) return;
     const name = document.getElementById('certifierInput').value.trim();
     const pos  = document.getElementById('certifierPosition').value.trim();
     if (!name) { alert('Please enter a certifier name.'); return; }
 
-    // Collect selected leave types
-    const leaveTypeIds = ['lt_leave_of_absence','lt_undertime','lt_tardy','lt_unauthorized'];
-    const selected = leaveTypeIds
-        .filter(id => document.getElementById(id).checked)
-        .map(id => document.getElementById(id).value);
+    const selected = getSelectedLeaveTypes();
 
     if (selected.length === 0) {
         document.getElementById('leaveTypeError').style.display = 'block';
@@ -692,6 +779,20 @@ function confirmPdf() {
 
     // Format: "leave of absence/undertime/tardy" etc.
     const leaveTypes = selected.join('/');
+
+    if (_pdfModalMode === 'bulk') {
+        const ids = getTargetEntryIds();
+        if (ids.length === 0) {
+            alert('No records available to generate.');
+            return;
+        }
+
+        submitGeneratedRecords(ids, name, pos, leaveTypes);
+        closePdfModal();
+        return;
+    }
+
+    if (!_activePdfRecordId) return;
 
     const base = PDF_BASE_ROUTES[_activePdfRecordId];
     const url  = base
@@ -842,6 +943,8 @@ function makeTablePaginator({ getRows, rangeLabel, totalPagesEl, pageInput, btnF
         const isLast  = currentPage >= totalPages;
         [btnFirst, btnPrev].forEach(b => b && (isFirst ? b.setAttribute('disabled','') : b.removeAttribute('disabled')));
         [btnNext,  btnLast ].forEach(b => b && (isLast  ? b.setAttribute('disabled','') : b.removeAttribute('disabled')));
+
+        updateSelectedEntryState();
     }
 
     return {
@@ -870,16 +973,57 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     window.entriesPaginator = entriesPaginator;
     entriesPaginator.init();
+    updateSelectedEntryState();
 });
 
-function exportReport(type) {
-    const rows = document.querySelectorAll('#entriesTable tbody tr[data-search]');
-    const ids = [];
-    rows.forEach(row => {
-        if (row.style.display !== 'none') {
-            ids.push(row.dataset.id);
+function getVisibleEntryRows() {
+    return Array.from(document.querySelectorAll('#entriesTable tbody tr[data-search]'))
+        .filter(row => row.style.display !== 'none');
+}
+
+function getSelectedEntryIds() {
+    return Array.from(document.querySelectorAll('.entry-select-checkbox:checked'))
+        .map(checkbox => checkbox.value);
+}
+
+function updateSelectedEntryState() {
+    const selectedIds = getSelectedEntryIds();
+    const selectedCount = selectedIds.length;
+    const selectedBadge = document.getElementById('selectedEntryCountBadge');
+    const selectAll = document.getElementById('selectAllEntries');
+    const visibleCheckboxes = getVisibleEntryRows()
+        .map(row => row.querySelector('.entry-select-checkbox'))
+        .filter(Boolean);
+    const checkedVisible = visibleCheckboxes.filter(checkbox => checkbox.checked).length;
+
+    if (selectedBadge) {
+        selectedBadge.textContent = `${selectedCount} ${selectedCount === 1 ? 'selected entry' : 'selected entries'}`;
+        selectedBadge.classList.toggle('hidden', selectedCount === 0);
+    }
+
+    if (selectAll) {
+        selectAll.checked = visibleCheckboxes.length > 0 && checkedVisible === visibleCheckboxes.length;
+        selectAll.indeterminate = checkedVisible > 0 && checkedVisible < visibleCheckboxes.length;
+    }
+}
+
+function toggleAllVisibleEntries(source) {
+    getVisibleEntryRows().forEach(row => {
+        const checkbox = row.querySelector('.entry-select-checkbox');
+        if (checkbox) {
+            checkbox.checked = source.checked;
         }
     });
+
+    updateSelectedEntryState();
+}
+
+function exportReport(type) {
+    let ids = getSelectedEntryIds();
+
+    if (ids.length === 0) {
+        ids = getVisibleEntryRows().map(row => row.dataset.id);
+    }
     
     if (ids.length === 0) {
         alert('No records to export.');
