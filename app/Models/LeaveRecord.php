@@ -45,6 +45,11 @@ class LeaveRecord extends Model
         return $this->belongsTo(Employee::class);
     }
 
+    public function createdByUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
     /**
      * Format an array of date strings into a compact human-readable string.
      * e.g. ["2026-02-14","2026-02-15","2026-02-19"] → "February 14, 15, 19, 2026"
@@ -52,6 +57,9 @@ class LeaveRecord extends Model
     public static function formatDates(array $dates): string
     {
         if (empty($dates)) return '—';
+
+        // Sort dates chronologically
+        sort($dates);
 
         // Group by year-month, sort each group's days
         $groups = [];
@@ -88,5 +96,38 @@ class LeaveRecord extends Model
         }
 
         return implode('; ', $parts);
+    }
+
+    /**
+     * Ensure a reference number is generated and stored for this record.
+     * $type should be 'LB' (Certificate) or 'LW' (Without Pay / Export PDF)
+     */
+    public function ensureReferenceNumber(string $type): void
+    {
+        $column = $type === 'LB' ? 'reference_no_lb' : 'reference_no_lw';
+
+        // Do not generate if it already exists
+        if (!empty($this->{$column})) {
+            return;
+        }
+
+        $year = date('Y');
+        $prefix = "{$type}-{$year}";
+
+        // Find the latest reference number for the current year
+        $latest = self::where($column, 'like', "{$prefix}%")
+            ->orderBy($column, 'desc')
+            ->value($column);
+
+        if ($latest) {
+            $numPart = str_replace($prefix, '', $latest);
+            $next = intval($numPart) + 1;
+        } else {
+            $next = 1;
+        }
+
+        // Format: [TYPE]-[YEAR][4-DIGIT INCREMENT], e.g., LB-20260001
+        $this->{$column} = sprintf("%s%04d", $prefix, $next);
+        $this->save();
     }
 }

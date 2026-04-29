@@ -199,7 +199,7 @@
 
         $allDates = $records->flatMap(function ($record) {
             return array_merge((array) $record->no_pay_dates, (array) $record->undertime_dates);
-        })->filter()->values();
+        })->filter()->sort()->values();
 
         if ($allDates->isNotEmpty()) {
             $yearsAndMonths = [];
@@ -214,6 +214,9 @@
                     $yearsAndMonths[$year][] = $month;
                 }
             }
+
+            // Ensure years are also in order
+            ksort($yearsAndMonths);
 
             $formattedParts = [];
             foreach ($yearsAndMonths as $year => $months) {
@@ -364,6 +367,14 @@
             @endif
         </div>
 
+    </div>
+
+    {{-- Reference Number --}}
+    <div style="font-size: 10pt; color: #555; margin-top: 30px;">
+        @foreach($records as $rec)
+            @if($rec->reference_no_lw || $rec->ref_number) Reference No.: <strong>{{ $rec->reference_no_lw ?? $rec->ref_number }}</strong><br>
+            @endif
+        @endforeach
     </div>
 </body>
 

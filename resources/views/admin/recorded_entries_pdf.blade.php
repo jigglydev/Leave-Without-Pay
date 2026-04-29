@@ -248,6 +248,11 @@
         $allDates = array_filter($allDates);
 
         if (count($allDates) > 0) {
+            // Sort all dates chronologically to ensure months are in order
+            usort($allDates, function ($a, $b) {
+                return strtotime($a) - strtotime($b);
+            });
+
             // Group months by year
             $yearsAndMonths = [];
             foreach ($allDates as $d) {
@@ -261,6 +266,9 @@
                     $yearsAndMonths[$year][] = $month;
                 }
             }
+
+            // Ensure years are also in order
+            ksort($yearsAndMonths);
 
             $formattedParts = [];
             foreach ($yearsAndMonths as $year => $months) {
@@ -394,6 +402,13 @@
             </div>
             <div style="clear: both;"></div>
         </div>
+
+        {{-- ── Reference Number ── --}}
+        @if($record->reference_no_lw || $record->ref_number)
+        <div style="margin-top: 24px; font-size: 10pt; color: #555;">
+            Reference No.: <strong>{{ $record->reference_no_lw ?? $record->ref_number }}</strong>
+        </div>
+        @endif
 
     </div>
 </body>

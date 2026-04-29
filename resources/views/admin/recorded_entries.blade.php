@@ -21,24 +21,47 @@
         <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">All saved leave record entries. Edit or generate PDF for each.</p>
     </div>
 
-    {{-- Filter button --}}
-    <button @click="open = !open"
-            class="relative flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all
-                   font-semibold text-sm shadow-sm select-none
-                   bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600
-                   text-slate-700 dark:text-slate-200
-                   hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M3 4a1 1 0 000 2h18a1 1 0 000-2H3zm3 6a1 1 0 000 2h12a1 1 0 000-2H6zm3 6a1 1 0 000 2h6a1 1 0 000-2H9z"/>
-        </svg>
-        Filter
-        {{-- Active count badge --}}
-        <span x-show="activeCount > 0" x-text="activeCount"
-              class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-blue-600 text-white
-                     text-[10px] font-bold flex items-center justify-center leading-none"
-              style="display:none"></span>
-    </button>
+    <div class="flex items-center gap-3">
+        {{-- Global Search Bar --}}
+        <div class="relative w-64 hidden sm:block">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" x-model="search" @input="applyFilters()"
+                   placeholder="Search entries..."
+                   class="w-full pl-9 pr-8 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600
+                          bg-white dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-100
+                          focus:outline-none focus:ring-2 focus:ring-blue-500 transition shadow-sm placeholder-slate-400"/>
+            {{-- Clear Search --}}
+            <button x-show="search" @click="search=''; applyFilters()"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500 transition-colors"
+                    style="display:none;">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        {{-- Filter button --}}
+        <button @click="open = !open"
+                class="relative flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all
+                       font-semibold text-sm shadow-sm select-none
+                       bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600
+                       text-slate-700 dark:text-slate-200
+                       hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3 4a1 1 0 000 2h18a1 1 0 000-2H3zm3 6a1 1 0 000 2h12a1 1 0 000-2H6zm3 6a1 1 0 000 2h6a1 1 0 000-2H9z"/>
+            </svg>
+            Filter
+            {{-- Active count badge --}}
+            <span x-show="activeCount > 0" x-text="activeCount"
+                  class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-blue-600 text-white
+                         text-[10px] font-bold flex items-center justify-center leading-none"
+                  style="display:none"></span>
+        </button>
+    </div>
 </div>
 
 {{-- ══ Slide-out filter drawer ══ --}}
@@ -310,6 +333,15 @@
                 Generate Records
             </button>
             
+            <button type="button"
+                    onclick="generateCertificate()"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-xs font-semibold shadow-sm transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Generate Certificate
+            </button>
+            
             <div x-data="{ reportOpen: false }" class="relative">
                 <button @click="reportOpen = !reportOpen" @click.away="reportOpen = false"
                         class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition-colors">
@@ -377,6 +409,7 @@
                     <th colspan="3" class="border border-slate-200 dark:border-slate-600 px-4 py-2 text-center text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide">
                         NO. OF DAYS OF UNDERTIME/TARDY W/OUT PAY
                     </th>
+                    <th rowspan="3" class="border border-slate-200 dark:border-slate-600 px-4 py-3 text-center text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide align-middle min-w-[90px]">CREATED BY</th>
                     <th rowspan="3" class="border border-slate-200 dark:border-slate-600 px-4 py-3 text-center text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide align-middle min-w-[130px]">ACTIONS</th>
                 </tr>
                 <tr class="bg-slate-50 dark:bg-slate-700/40">
@@ -396,15 +429,22 @@
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
                 @foreach($records as $rec)
-                @php $u = $rec->user; @endphp
-                @php $createdDate = $rec->created_at ? $rec->created_at->format('Y-m-d') : ''; @endphp
-                @php 
+                @php
+                    $u = $rec->user;
+                    $createdDate = $rec->created_at ? $rec->created_at->format('Y-m-d') : '';
                     $displayName = $rec->snapshot_name ?? ($u ? $u->full_name : '—');
                     $displayPosition = $rec->snapshot_position ?? ($u ? $u->position : '—');
                     $displayOffice = $rec->snapshot_office ?? ($u ? $u->office : '—');
+                    $creator = $rec->createdByUser;
+                    $creatorName = $creator ? $creator->full_name : '—';
+                    $creatorInitials = $creator
+                        ? strtoupper(substr($creator->given_name ?: ($creator->name ?? '?'), 0, 1) . substr($creator->last_name ?? '', 0, 1))
+                        : '?';
+                    $refLw = $rec->reference_no_lw ?? null;
+                    $refLb = $rec->reference_no_lb ?? null;
                 @endphp
                 <tr data-id="{{ $rec->id }}"
-                    data-search="{{ strtolower($displayName . ' ' . $displayPosition . ' ' . $displayOffice) }}"
+                    data-search="{{ strtolower($displayName . ' ' . $displayPosition . ' ' . $displayOffice . ' ' . $creatorName . ' ' . $refLw . ' ' . $refLb) }}"
                     data-date="{{ $createdDate }}"
                     data-month="{{ $createdDate ? $rec->created_at->format('m') : '' }}"
                     data-year="{{ $createdDate ? $rec->created_at->format('Y') : '' }}"
@@ -435,6 +475,27 @@
                     <td class="border border-slate-100 dark:border-slate-700 px-3 py-3 text-center text-slate-700 dark:text-slate-200">{{ $rec->undertime_hours ?? '—' }}</td>
                     <td class="border border-slate-100 dark:border-slate-700 px-3 py-3 text-center text-slate-700 dark:text-slate-200">{{ $rec->undertime_minutes ?? '—' }}</td>
                     <td class="border border-slate-100 dark:border-slate-700 px-3 py-3 text-slate-600 dark:text-slate-300 text-[11px]">{{ $rec->undertime_dates ? \App\Models\LeaveRecord::formatDates($rec->undertime_dates) : '—' }}</td>
+                    {{-- Created By --}}
+                    <td class="border border-slate-100 dark:border-slate-700 px-2 py-3 text-center align-middle">
+                        <div class="flex flex-col items-center gap-1">
+                            {{-- Avatar with JS tooltip --}}
+                            <div class="inline-flex"
+                                 onmouseenter="showCreatorTooltip(this, '{{ addslashes($creatorName) }}')"
+                                 onmouseleave="hideCreatorTooltip()">
+                                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-[13px] font-bold shadow-sm cursor-default select-none">
+                                    {{ $creatorInitials }}
+                                </div>
+                            </div>
+                            {{-- Reference numbers --}}
+                            @if($refLw || $refLb)
+                            <div class="text-[8px] leading-tight text-slate-400 dark:text-slate-500 text-center font-mono">
+                                @if($refLw)<span title="LW Ref">{{ $refLw }}</span>@endif
+                                @if($refLw && $refLb)<br>@endif
+                                @if($refLb)<span title="LB Ref">{{ $refLb }}</span>@endif
+                            </div>
+                            @endif
+                        </div>
+                    </td>
                     {{-- Actions --}}
                     <td class="border border-slate-100 dark:border-slate-700 px-3 py-3">
                         <div class="flex items-center justify-center gap-2">
@@ -646,6 +707,116 @@
     </div>
 </div>
 
+{{-- ══ Certificate Modal ══ --}}
+<div id="certificateModal" style="display:none"
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-md p-6 mx-4">
+        <h3 class="text-base font-bold text-slate-800 dark:text-white mb-4">Generate Certificate</h3>
+
+        <div class="mb-4">
+            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Prefix <span class="text-rose-500">*</span></label>
+            <div class="flex gap-2">
+                <div class="relative flex-1">
+                    <input type="hidden" id="certPrefix" value="{{ $prefixes->first()?->name }}">
+                    <button type="button" onclick="togglePrefixDropdown()" 
+                            id="prefixDropdownBtn"
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-left flex items-center justify-between">
+                        <span id="selectedPrefixLabel">{{ $prefixes->first()?->name ?? 'Select Prefix' }}</span>
+                        <svg class="w-4 h-4 text-slate-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    
+                    {{-- Custom Dropdown Menu --}}
+                    <div id="prefixDropdown" style="display: none;"
+                         class="absolute z-20 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-600">
+                        <div id="prefixList">
+                            @foreach($prefixes as $p)
+                                <div class="group px-3.5 py-2.5 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 text-sm text-slate-800 dark:text-slate-100 flex items-center justify-between transition-colors"
+                                     data-id="{{ $p->id }}" data-name="{{ $p->name }}" onclick="selectPrefix('{{ addslashes($p->name) }}')">
+                                    <span class="truncate">{{ $p->name }}</span>
+                                    <button type="button" onclick="deletePrefix(event, {{ $p->id }}, '{{ addslashes($p->name) }}')"
+                                            title="Delete prefix"
+                                            class="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-700/50 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-all border border-slate-100 dark:border-slate-600">
+                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="showAddPrefixUI()" 
+                        title="Add new prefix"
+                        class="px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition shadow-sm">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                </button>
+            </div>
+            {{-- Inline Add Prefix UI --}}
+            <style>
+                #prefixDropdown::-webkit-scrollbar { width: 4px; }
+                #prefixDropdown::-webkit-scrollbar-track { background: transparent; }
+                #prefixDropdown::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+                .dark #prefixDropdown::-webkit-scrollbar-thumb { background: #475569; }
+            </style>
+            <div id="addPrefixContainer" style="display:none;" class="mt-2 flex items-center gap-2 animate-in fade-in slide-in-from-top-1 duration-200">
+                <input type="text" id="newPrefixInput" placeholder="New prefix..." 
+                       class="flex-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
+                <button type="button" onclick="saveNewPrefix()" class="px-3 py-2 rounded-lg bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider hover:bg-blue-700 transition shadow-sm">Save</button>
+                <button type="button" onclick="hideAddPrefixUI()" class="text-xs font-semibold text-slate-400 hover:text-rose-500 transition-colors px-1">Cancel</button>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Purpose / Transfer Details <span class="text-rose-500">*</span></label>
+            <input type="text" id="certPurpose" autocomplete="off"
+                   placeholder="e.g. transfer to Clerk of Court"
+                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"/>
+        </div>
+
+        <div class="mb-4 relative">
+            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Certifier Name</label>
+            <input type="text" id="certCertifierInput" autocomplete="off"
+                   value="AIDA B. LOVERES"
+                   placeholder="Search or type a name..."
+                   onfocus="showCertCertifierDropdown()"
+                   oninput="filterCertCertifierDropdown()"
+                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"/>
+            
+            <div id="certCertifierDropdown" style="display: none;"
+                 class="absolute z-10 w-full mt-1 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                 @foreach($allEmpJson as $emp)
+                     <div class="px-3 py-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 text-sm text-slate-800 dark:text-slate-100 cert-certifier-option"
+                          data-name="{{ strtolower($emp['name']) }}"
+                          data-position="{{ $emp['position'] }}"
+                          onclick="selectCertCertifier('{{ addslashes($emp['name']) }}', '{{ addslashes($emp['position']) }}')">
+                         {{ $emp['name'] }}
+                     </div>
+                 @endforeach
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Certifier Position</label>
+            <textarea id="certCertifierPosition" rows="2"
+                      placeholder="Position title…"
+                      class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">PG Department Head/PHRM Officer</textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-3">
+            <button type="button" onclick="closeCertificateModal()"
+                    class="px-4 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white transition">Cancel</button>
+            <button type="button" onclick="confirmCertificate()"
+                    class="px-5 py-2 rounded-xl bg-amber-600 text-white text-sm font-semibold hover:bg-amber-700 transition shadow-sm">
+                Generate Certificate
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
 const PDF_BASE_ROUTES = @json(
     $records->mapWithKeys(fn($r) => [$r->id => route('admin.recorded-entries.pdf', $r->id)])
@@ -681,6 +852,218 @@ function openGenerateRecordsModal() {
     _activePdfRecordId = null;
     resetPdfModal();
     document.getElementById('pdfModal').style.display = 'flex';
+}
+
+let _activeCertRecordId = null;
+
+function generateCertificate() {
+    const ids = getTargetEntryIds();
+    if (ids.length === 0) {
+        alert('Please select a record to generate a certificate.');
+        return;
+    }
+    if (ids.length > 1) {
+        alert('Please select only one record to generate a certificate.');
+        return;
+    }
+
+    _activeCertRecordId = ids[0];
+    document.getElementById('certPurpose').value = '';
+    document.getElementById('certificateModal').style.display = 'flex';
+}
+
+function closeCertificateModal() {
+    document.getElementById('certificateModal').style.display = 'none';
+    document.getElementById('certCertifierDropdown').style.display = 'none';
+    _activeCertRecordId = null;
+}
+
+function showCertCertifierDropdown() {
+    document.getElementById('certCertifierDropdown').style.display = 'block';
+    filterCertCertifierDropdown();
+}
+
+function filterCertCertifierDropdown() {
+    const term = document.getElementById('certCertifierInput').value.toLowerCase().trim();
+    const options = document.querySelectorAll('.cert-certifier-option');
+    options.forEach(opt => {
+        const name = opt.getAttribute('data-name');
+        if (!term || name.includes(term)) {
+            opt.style.display = 'block';
+        } else {
+            opt.style.display = 'none';
+        }
+    });
+    
+    const exactMatch = Array.from(options).find(opt => opt.getAttribute('data-name') === term);
+    if (exactMatch) {
+        document.getElementById('certCertifierPosition').value = exactMatch.getAttribute('data-position') || '';
+    }
+}
+
+function selectCertCertifier(name, position) {
+    document.getElementById('certCertifierInput').value = name;
+    document.getElementById('certCertifierPosition').value = position;
+    document.getElementById('certCertifierDropdown').style.display = 'none';
+}
+
+/* ── Prefix Management ── */
+function togglePrefixDropdown() {
+    const dropdown = document.getElementById('prefixDropdown');
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+}
+
+// Close prefix dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const btn = document.getElementById('prefixDropdownBtn');
+    const dropdown = document.getElementById('prefixDropdown');
+    if (btn && dropdown && !btn.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+    }
+});
+
+function selectPrefix(name) {
+    document.getElementById('certPrefix').value = name;
+    document.getElementById('selectedPrefixLabel').textContent = name;
+    document.getElementById('prefixDropdown').style.display = 'none';
+}
+
+function showAddPrefixUI() {
+    document.getElementById('addPrefixContainer').style.display = 'flex';
+    document.getElementById('newPrefixInput').focus();
+    document.getElementById('prefixDropdown').style.display = 'none';
+}
+
+function hideAddPrefixUI() {
+    document.getElementById('addPrefixContainer').style.display = 'none';
+    document.getElementById('newPrefixInput').value = '';
+}
+
+async function saveNewPrefix() {
+    const input = document.getElementById('newPrefixInput');
+    const name = input.value.trim();
+    if (!name) return;
+
+    try {
+        const response = await fetch('{{ route("admin.prefixes.store") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ name })
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            alert(err.message || 'Failed to save prefix.');
+            return;
+        }
+
+        const prefix = await response.json();
+        
+        // Add to custom list
+        const list = document.getElementById('prefixList');
+        const item = document.createElement('div');
+        item.className = "group px-3.5 py-2.5 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 text-sm text-slate-800 dark:text-slate-100 flex items-center justify-between transition-colors";
+        item.setAttribute('data-id', prefix.id);
+        item.setAttribute('data-name', prefix.name);
+        item.onclick = () => selectPrefix(prefix.name);
+        
+        item.innerHTML = `
+            <span class="truncate">${prefix.name}</span>
+            <button type="button" onclick="deletePrefix(event, ${prefix.id}, '${prefix.name.replace(/'/g, "\\'")}')"
+                    title="Delete prefix"
+                    class="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-700/50 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-all border border-slate-100 dark:border-slate-600">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        `;
+        list.appendChild(item);
+        
+        // Select the new one
+        selectPrefix(prefix.name);
+        
+        hideAddPrefixUI();
+    } catch (e) {
+        console.error(e);
+        alert('An error occurred.');
+    }
+}
+
+async function deletePrefix(event, id, name) {
+    event.stopPropagation(); // Don't trigger selectPrefix
+    
+    const items = document.querySelectorAll('#prefixList > div');
+    if (items.length <= 1) {
+        alert('At least one prefix must remain.');
+        return;
+    }
+
+    if (!confirm(`Are you sure you want to delete the prefix "${name}"?`)) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/prefixes/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            alert(err.message || 'Failed to delete prefix.');
+            return;
+        }
+
+        // Remove from UI
+        const item = document.querySelector(`#prefixList > div[data-id="${id}"]`);
+        if (item) item.remove();
+
+        // If the deleted prefix was selected, select the first available one
+        const currentSelected = document.getElementById('certPrefix').value;
+        if (currentSelected === name) {
+            const firstItem = document.querySelector('#prefixList > div');
+            if (firstItem) {
+                selectPrefix(firstItem.getAttribute('data-name'));
+            }
+        }
+    } catch (e) {
+        console.error(e);
+        alert('An error occurred.');
+    }
+}
+
+function confirmCertificate() {
+    if (!_activeCertRecordId) return;
+
+    const prefix = document.getElementById('certPrefix').value;
+    const purpose = document.getElementById('certPurpose').value.trim();
+    const certifierName = document.getElementById('certCertifierInput').value.trim();
+    const certifierPosition = document.getElementById('certCertifierPosition').value.trim();
+
+    if (!purpose) {
+        alert('Please enter a purpose/transfer detail.');
+        return;
+    }
+    if (!certifierName) {
+        alert('Please enter a certifier name.');
+        return;
+    }
+
+    const url = '{{ url("recorded-entries") }}/' + _activeCertRecordId + '/certificate'
+        + '?prefix=' + encodeURIComponent(prefix)
+        + '&purpose=' + encodeURIComponent(purpose)
+        + '&certifier_name=' + encodeURIComponent(certifierName)
+        + '&certifier_position=' + encodeURIComponent(certifierPosition);
+    
+    window.open(url, '_blank');
+    closeCertificateModal();
 }
 
 function closePdfModal() {
@@ -1056,5 +1439,59 @@ function exportReport(type) {
     form.submit();
     document.body.removeChild(form);
 }
+
+/* ── Creator Tooltip ── */
+(function () {
+    let tip = null;
+
+    window.showCreatorTooltip = function (el, name) {
+        hideCreatorTooltip();
+
+        tip = document.createElement('div');
+        tip.id = '__creator_tip__';
+        tip.textContent = name;
+        tip.style.cssText = [
+            'position:fixed',
+            'z-index:9999',
+            'background:#1e293b',
+            'color:#fff',
+            'font-size:11px',
+            'font-weight:500',
+            'padding:4px 10px',
+            'border-radius:8px',
+            'white-space:nowrap',
+            'pointer-events:none',
+            'box-shadow:0 4px 12px rgba(0,0,0,.25)',
+            'transition:opacity .12s',
+            'opacity:0',
+        ].join(';');
+
+        // Arrow
+        const arrow = document.createElement('div');
+        arrow.style.cssText = [
+            'position:absolute',
+            'top:100%',
+            'left:50%',
+            'transform:translateX(-50%)',
+            'border:5px solid transparent',
+            'border-top-color:#1e293b',
+        ].join(';');
+        tip.appendChild(arrow);
+        document.body.appendChild(tip);
+
+        // Position above the avatar
+        const rect = el.getBoundingClientRect();
+        const tipW = tip.offsetWidth;
+        const tipH = tip.offsetHeight;
+        tip.style.left = (rect.left + rect.width / 2 - tipW / 2) + 'px';
+        tip.style.top  = (rect.top - tipH - 8) + 'px';
+        // Fade in
+        requestAnimationFrame(() => { tip.style.opacity = '1'; });
+    };
+
+    window.hideCreatorTooltip = function () {
+        if (tip) { tip.remove(); tip = null; }
+    };
+})();
 </script>
 @endpush

@@ -191,7 +191,7 @@ Route::middleware('auth')->group(function () {
     // ── Recorded Entries ────────────────────────────────────────────────────
     Route::get('/recorded-entries', function () {
         // Admins see all records; employees only see records they created
-        $recordsQuery = \App\Models\LeaveRecord::with('user')->orderByDesc('created_at');
+        $recordsQuery = \App\Models\LeaveRecord::with('user', 'createdByUser')->orderByDesc('created_at');
         if (auth()->user()->isEmployee()) {
             $recordsQuery->where('created_by', auth()->id());
         }
@@ -205,8 +205,28 @@ Route::middleware('auth')->group(function () {
             ->map(fn($u) => ['id' => $u->id, 'name' => $u->full_name])
             ->values();
 
-        return view('admin.recorded_entries', compact('records', 'creators'));
+        $prefixes = \App\Models\Prefix::all();
+
+        return view('admin.recorded_entries', compact('records', 'creators', 'prefixes'));
     })->name('admin.recorded-entries');
+
+    Route::post('/prefixes', function (\Illuminate\Http\Request $request) {
+        $validated = $request->validate([
+            'name' => 'required|string|max:50|unique:prefixes,name'
+        ]);
+        $prefix = \App\Models\Prefix::create($validated);
+        return response()->json($prefix);
+    })->name('admin.prefixes.store');
+
+    Route::delete('/prefixes/{id}', function ($id) {
+        $count = \App\Models\Prefix::count();
+        if ($count <= 1) {
+            return response()->json(['message' => 'At least one prefix must remain.'], 422);
+        }
+        $prefix = \App\Models\Prefix::findOrFail($id);
+        $prefix->delete();
+        return response()->json(['success' => true]);
+    })->name('admin.prefixes.destroy');
 
     Route::get('/recorded-entries/{id}/edit', function ($id) {
         $record   = \App\Models\LeaveRecord::with('user', 'employee')->findOrFail($id);
@@ -324,6 +344,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/recorded-entries/{id}/pdf', function (\Illuminate\Http\Request $request, $id) {
         $record = \App\Models\LeaveRecord::with('user')->findOrFail($id);
+        
+        // Generate LW ref if missing
+        $record->ensureReferenceNumber('LW');
+
         $email = $record->user?->email;
         \App\Models\ActivityLog::log(
             'pdf_generated',
@@ -338,6 +362,28 @@ Route::middleware('auth')->group(function () {
             'record', 'certifierName', 'certifierPosition', 'preparedBy', 'leaveTypes'
         ));
     })->name('admin.recorded-entries.pdf');
+
+    Route::get('/recorded-entries/{id}/certificate', function (\Illuminate\Http\Request $request, $id) {
+        $record = \App\Models\LeaveRecord::with('user', 'employee')->findOrFail($id);
+        
+        // Generate LB ref if missing
+        $record->ensureReferenceNumber('LB');
+
+        \App\Models\ActivityLog::log(
+            'certificate_generated',
+            'Certificate generated for ' . ($record->snapshot_name ?? $record->user?->full_name ?? 'unknown employee'),
+            ['leave_record_id' => $id, 'employee' => $record->snapshot_name ?? $record->user?->full_name]
+        );
+
+        $prefix = $request->query('prefix', 'Mr.');
+        $purpose = $request->query('purpose', '');
+        $certifierName = $request->query('certifier_name', 'AIDA B. LOVERES');
+        $certifierPosition = $request->query('certifier_position', 'PG Department Head/PHRM Officer');
+
+        return view('admin.recorded_entries_certificate', compact(
+            'record', 'prefix', 'purpose', 'certifierName', 'certifierPosition'
+        ));
+    })->name('admin.recorded-entries.certificate');
 
     Route::delete('/recorded-entries/{id}', function ($id) {
         $record = \App\Models\LeaveRecord::with('user')->findOrFail($id);
@@ -364,6 +410,12 @@ Route::middleware('auth')->group(function () {
         if (auth()->user()->isEmployee()) {
              $records = $records->filter(fn($r) => $r->created_by === auth()->id());
         }
+
+        // Generate LW ref if missing
+        foreach ($records as $record) {
+            $record->ensureReferenceNumber('LW');
+        }
+
         $preparedBy = auth()->user();
         $certifierName = $request->input('certifier_name');
         $certifierPosition = $request->input('certifier_position');
