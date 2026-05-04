@@ -8,50 +8,64 @@
     <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Welcome back, {{ Auth::user()->name }}. Here's what's happening today.</p>
 </div>
 
-{{-- Stats Cards — 2 cards only --}}
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+{{-- Stats Cards — 4 cards --}}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
 
-    {{-- Total Employees --}}
-    <a href="{{ route('admin.employees') }}"
-       class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group block">
+    {{-- Total Leave Without Pay --}}
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group">
         <div class="flex items-center justify-between mb-4">
-            <div class="w-11 h-11 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <div class="w-11 h-11 rounded-xl bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                <svg class="w-6 h-6 text-rose-600 dark:text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
                 </svg>
             </div>
-            <span class="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30 px-2 py-0.5 rounded-full">View all →</span>
+            <span class="text-xs font-medium text-rose-600 dark:text-rose-400 bg-rose-100 dark:bg-rose-900/30 px-2 py-0.5 rounded-full">{{ now()->format('F') }}</span>
         </div>
-        <p class="text-3xl font-bold text-slate-800 dark:text-white">{{ $employeeCount }}</p>
-        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">No. of All Leave Processors</p>
-    </a>
+        <p class="text-3xl font-bold text-slate-800 dark:text-white">{{ $totalLeaveWithoutPay ?: '0' }}</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Total Leave Without Pay</p>
+    </div>
 
-    {{-- Recorded Entries This Month --}}
-    <a href="{{ route('admin.recorded-entries') }}"
-       class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group block">
+    {{-- Total Leave Balance --}}
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-11 h-11 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/30 px-2 py-0.5 rounded-full">{{ now()->format('F') }}</span>
+        </div>
+        <p class="text-3xl font-bold text-slate-800 dark:text-white">{{ $totalLeaveBalance ?: '0' }}</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Total Leave Balance</p>
+    </div>
+
+    {{-- Total Undertime --}}
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-11 h-11 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                <svg class="w-6 h-6 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <span class="text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 rounded-full">{{ now()->format('F') }}</span>
+        </div>
+        <p class="text-3xl font-bold text-slate-800 dark:text-white">{{ $totalUndertime }}</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Total Undertime Letters</p>
+    </div>
+
+    {{-- Total Tardy --}}
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group">
         <div class="flex items-center justify-between mb-4">
             <div class="w-11 h-11 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
                 <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
             </div>
             <span class="text-xs font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-indigo-900/30 px-2 py-0.5 rounded-full">{{ now()->format('F') }}</span>
         </div>
-        <p class="text-3xl font-bold text-slate-800 dark:text-white">
-            @if(Auth::user()->isAdmin())
-                {{ $recordedEntriesThisMonth }}
-            @else
-                {{ $myEntriesThisMonth }}
-            @endif
-        </p>
-        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            @if(Auth::user()->isAdmin())
-                No. of Recorded Entries
-            @else
-                My Recorded Entries
-            @endif
-        </p>
-    </a>
+        <p class="text-3xl font-bold text-slate-800 dark:text-white">{{ $totalTardy }}</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Total Tardy Letters</p>
+    </div>
 
 </div>
 

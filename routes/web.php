@@ -26,21 +26,49 @@ Route::middleware('guest')->group(function () {
 // ── Admin / Protected routes ───────────────────────────────────────────────
 Route::middleware('auth')->group(function () {
 
-    // Dashboard — passes live employee count
+    // Dashboard — passes monthly stats cards
     Route::get('/dashboard', function () {
-        // Only count/show confirmed employees (is_confirmed = true)
-        $employeeCount = User::where('role', 'employee')->where('is_confirmed', true)->count();
+        $isEmployee = auth()->user()->isEmployee();
 
-        // All entries this month (used by admin card)
-        $recordedEntriesThisMonth = \App\Models\LeaveRecord::whereYear('created_at', now()->year)
-            ->whereMonth('created_at', now()->month)
-            ->count();
+        // Base query: current month records (employees see only their own)
+        $monthQuery = \App\Models\LeaveRecord::whereYear('created_at', now()->year)
+            ->whereMonth('created_at', now()->month);
 
-        // The logged-in user's own entries this month (entries THEY submitted, regardless of subject)
-        $myEntriesThisMonth = \App\Models\LeaveRecord::where('created_by', auth()->id())
+        if ($isEmployee) {
+            $monthQuery->where('created_by', auth()->id());
+        }
+
+        $monthRecords = (clone $monthQuery)->get();
+
+        // 1. Total Leave Without Pay (count of entries with reference_no_lw)
+        $totalLeaveWithoutPay = (clone $monthQuery)->whereNotNull('reference_no_lw')->count();
+
+        // 2. Total Leave Balance (count of entries with reference_no_lb)
+        $totalLeaveBalance = (clone $monthQuery)->whereNotNull('reference_no_lb')->count();
+
+        // 3. Total Undertime (count of undertime letters with a ref no. for the current month)
+        $totalUndertimeQuery = \App\Models\GeneratedLetter::where('type', 'undertime')
+            ->whereNotNull('reference_no')
             ->whereYear('created_at', now()->year)
-            ->whereMonth('created_at', now()->month)
-            ->count();
+            ->whereMonth('created_at', now()->month);
+
+        if ($isEmployee) {
+            $totalUndertimeQuery->where('created_by', auth()->id());
+        }
+
+        $totalUndertime = $totalUndertimeQuery->count();
+
+        // 4. Total Tardy (count of tardy letters with a ref no. for the current month)
+        $totalTardyQuery = \App\Models\GeneratedLetter::where('type', 'tardy')
+            ->whereNotNull('reference_no')
+            ->whereYear('created_at', now()->year)
+            ->whereMonth('created_at', now()->month);
+
+        if ($isEmployee) {
+            $totalTardyQuery->where('created_by', auth()->id());
+        }
+
+        $totalTardy = $totalTardyQuery->count();
 
         $recentEmployees = User::where('role', 'employee')
             ->where('is_confirmed', true)
@@ -49,9 +77,10 @@ Route::middleware('auth')->group(function () {
             ->get();
 
         return view('admin.dashboard', compact(
-            'employeeCount',
-            'recordedEntriesThisMonth',
-            'myEntriesThisMonth',
+            'totalLeaveWithoutPay',
+            'totalLeaveBalance',
+            'totalUndertime',
+            'totalTardy',
             'recentEmployees'
         ));
     })->name('admin.dashboard');
@@ -982,6 +1011,292 @@ Route::middleware('auth')->group(function () {
         );
         return redirect()->route('admin.settings')->with('status', ($user->full_name ?: $user->name) . "'s access level updated to {$label}.");
     })->name('admin.settings.user-role.update');
+
+    // ── Undertime & Tardy Records ───────────────────────────────────────────
+    Route::get('/undertime-tardy/tardy-letter', function () {
+        $userList = \App\Models\User::where('role', 'employee')
+            ->where('is_confirmed', true)
+            ->orderBy('last_name')->orderBy('given_name')
+            ->get(['id','last_name','given_name','middle_name','suffix','name','position','office'])
+            ->map(fn($u) => [
+                'id'       => 'user_' . $u->id,
+                'name'     => $u->full_name,
+                'position' => $u->position ?? '',
+                'office'   => $u->office ?? '',
+            ]);
+
+        $empList = \App\Models\Employee::orderBy('last_name')->orderBy('given_name')
+            ->get()
+            ->map(fn($e) => [
+                'id'       => 'emp_' . $e->id,
+                'name'     => $e->full_name,
+                'position' => $e->position ?? '',
+                'office'   => $e->office ?? '',
+            ]);
+
+        $allUsers = $userList->concat($empList)->sortBy('name')->values();
+        $prefixes = \App\Models\Prefix::all();
+
+        return view('admin.tardy_letter', compact('allUsers', 'prefixes'));
+    })->name('admin.undertime-tardy.tardy-letter');
+
+    Route::get('/undertime-tardy/undertime-letter', function () {
+        $userList = \App\Models\User::where('role', 'employee')
+            ->where('is_confirmed', true)
+            ->orderBy('last_name')->orderBy('given_name')
+            ->get(['id','last_name','given_name','middle_name','suffix','name','position','office'])
+            ->map(fn($u) => [
+                'id'       => 'user_' . $u->id,
+                'name'     => $u->full_name,
+                'position' => $u->position ?? '',
+                'office'   => $u->office ?? '',
+            ]);
+
+        $empList = \App\Models\Employee::orderBy('last_name')->orderBy('given_name')
+            ->get()
+            ->map(fn($e) => [
+                'id'       => 'emp_' . $e->id,
+                'name'     => $e->full_name,
+                'position' => $e->position ?? '',
+                'office'   => $e->office ?? '',
+            ]);
+
+        $allUsers = $userList->concat($empList)->sortBy('name')->values();
+        $prefixes = \App\Models\Prefix::all();
+
+        return view('admin.undertime_letter', compact('allUsers', 'prefixes'));
+    })->name('admin.undertime-tardy.undertime-letter');
+
+    Route::post('/undertime-tardy/tardy-letter/generate', function (Request $request) {
+        $request->validate([
+            'person_id'       => 'required',
+            'prefix'          => 'required',
+            'month'           => 'required',
+            'year'            => 'required',
+            'tardiness_count' => 'required|string|max:100',
+        ]);
+
+        $personId = $request->input('person_id');
+        if (str_starts_with($personId, 'user_')) {
+            $emp = \App\Models\User::find(substr($personId, 5));
+        } else {
+            $emp = \App\Models\Employee::find(substr($personId, 4));
+        }
+
+        $letter = \App\Models\GeneratedLetter::create([
+            'type'                => 'tardy',
+            'person_id'           => $personId,
+            'employee_name'       => $emp ? ($emp->full_name ?: $emp->name) : '',
+            'employee_prefix'     => $request->input('prefix'),
+            'employee_position'   => $emp->position ?? null,
+            'employee_office'     => $emp->office ?? null,
+            'month'               => $request->input('month'),
+            'year'                => $request->input('year'),
+            'occurrences'         => $request->input('tardiness_count'),
+            'certifier_name'      => $request->input('certifier_name', 'AIDA B. LOVERES'),
+            'certifier_position'  => $request->input('certifier_position', 'PG Department Head/PHRM Officer'),
+            'created_by'          => auth()->id(),
+        ]);
+
+        \App\Models\ActivityLog::log(
+            'letter_created',
+            'Tardy letter saved for ' . $letter->employee_name,
+            ['entity' => 'generated_letter']
+        );
+
+        return redirect()->route('admin.undertime-tardy.generated-letters')
+            ->with('status', 'Tardy letter saved to Generated Letters.');
+    })->name('admin.undertime-tardy.tardy-letter.generate');
+
+    Route::post('/undertime-tardy/undertime-letter/generate', function (Request $request) {
+        $request->validate([
+            'person_id'       => 'required',
+            'prefix'          => 'required',
+            'month'           => 'required',
+            'year'            => 'required',
+            'undertime_count' => 'required|string|max:100',
+        ]);
+
+        $personId = $request->input('person_id');
+        if (str_starts_with($personId, 'user_')) {
+            $emp = \App\Models\User::find(substr($personId, 5));
+        } else {
+            $emp = \App\Models\Employee::find(substr($personId, 4));
+        }
+
+        $letter = \App\Models\GeneratedLetter::create([
+            'type'                => 'undertime',
+            'person_id'           => $personId,
+            'employee_name'       => $emp ? ($emp->full_name ?: $emp->name) : '',
+            'employee_prefix'     => $request->input('prefix'),
+            'employee_position'   => $emp->position ?? null,
+            'employee_office'     => $emp->office ?? null,
+            'month'               => $request->input('month'),
+            'year'                => $request->input('year'),
+            'occurrences'         => $request->input('undertime_count'),
+            'certifier_name'      => $request->input('certifier_name', 'AIDA B. LOVERES'),
+            'certifier_position'  => $request->input('certifier_position', 'PG Department Head/PHRM Officer'),
+            'created_by'          => auth()->id(),
+        ]);
+
+        \App\Models\ActivityLog::log(
+            'letter_created',
+            'Undertime letter saved for ' . $letter->employee_name,
+            ['entity' => 'generated_letter']
+        );
+
+        return redirect()->route('admin.undertime-tardy.generated-letters')
+            ->with('status', 'Undertime letter saved to Generated Letters.');
+    })->name('admin.undertime-tardy.undertime-letter.generate');
+
+    // ── Generated Letters (list + edit + print + delete) ─────────────────────
+    Route::get('/undertime-tardy/generated-letters', function () {
+        $letters = \App\Models\GeneratedLetter::with('createdByUser')->orderByDesc('created_at')->get();
+        return view('admin.generated_letters', compact('letters'));
+    })->name('admin.undertime-tardy.generated-letters');
+
+    Route::get('/undertime-tardy/generated-letters/{id}/edit', function ($id) {
+        $letter = \App\Models\GeneratedLetter::findOrFail($id);
+
+        $userList = \App\Models\User::where('role', 'employee')
+            ->where('is_confirmed', true)
+            ->orderBy('last_name')->orderBy('given_name')
+            ->get(['id','last_name','given_name','middle_name','suffix','name','position','office'])
+            ->map(fn($u) => [
+                'id'       => 'user_' . $u->id,
+                'name'     => $u->full_name,
+                'position' => $u->position ?? '',
+                'office'   => $u->office ?? '',
+            ]);
+
+        $empList = \App\Models\Employee::orderBy('last_name')->orderBy('given_name')
+            ->get()
+            ->map(fn($e) => [
+                'id'       => 'emp_' . $e->id,
+                'name'     => $e->full_name,
+                'position' => $e->position ?? '',
+                'office'   => $e->office ?? '',
+            ]);
+
+        $allUsers = $userList->concat($empList)->sortBy('name')->values();
+        $prefixes = \App\Models\Prefix::all();
+
+        return view('admin.generated_letters_edit', compact('letter', 'allUsers', 'prefixes'));
+    })->name('admin.undertime-tardy.generated-letters.edit');
+
+    Route::patch('/undertime-tardy/generated-letters/{id}', function (Request $request, $id) {
+        $letter = \App\Models\GeneratedLetter::findOrFail($id);
+
+        $request->validate([
+            'person_id'          => 'required',
+            'prefix'             => 'required',
+            'month'              => 'required',
+            'year'               => 'required',
+            'occurrences'        => 'required|string|max:100',
+            'certifier_name'     => 'required|string|max:255',
+            'certifier_position' => 'required|string|max:255',
+        ]);
+
+        $personId = $request->input('person_id');
+        if (str_starts_with($personId, 'user_')) {
+            $emp = \App\Models\User::find(substr($personId, 5));
+        } else {
+            $emp = \App\Models\Employee::find(substr($personId, 4));
+        }
+
+        $letter->update([
+            'person_id'           => $personId,
+            'employee_name'       => $emp ? ($emp->full_name ?: $emp->name) : $letter->employee_name,
+            'employee_prefix'     => $request->input('prefix'),
+            'employee_position'   => $emp->position ?? $letter->employee_position,
+            'employee_office'     => $emp->office ?? $letter->employee_office,
+            'month'               => $request->input('month'),
+            'year'                => $request->input('year'),
+            'occurrences'         => $request->input('occurrences'),
+            'certifier_name'      => $request->input('certifier_name'),
+            'certifier_position'  => $request->input('certifier_position'),
+        ]);
+
+        return redirect()->route('admin.undertime-tardy.generated-letters')
+            ->with('status', 'Generated letter updated successfully.');
+    })->name('admin.undertime-tardy.generated-letters.update');
+
+    Route::get('/undertime-tardy/generated-letters/{id}/print', function ($id) {
+        $letter = \App\Models\GeneratedLetter::findOrFail($id);
+
+        $isFirstTime = empty($letter->reference_no);
+
+        // Assign a reference number on first print (idempotent — skips if already set)
+        $letter->ensureReferenceNumber();
+
+        if ($isFirstTime) {
+            \App\Models\ActivityLog::log(
+                'letter_generated',
+                ucfirst($letter->type) . ' letter generated: ' . $letter->reference_no . ' for ' . $letter->employee_name,
+                ['entity' => 'generated_letter']
+            );
+        }
+
+        // Rebuild the employee object (or a stdClass) so print views work unchanged
+        $personId = $letter->person_id;
+        if (str_starts_with($personId, 'user_')) {
+            $employee = \App\Models\User::find(substr($personId, 5));
+        } else {
+            $employee = \App\Models\Employee::find(substr($personId, 4));
+        }
+
+        // Fall back to a plain object built from snapshot data so the print
+        // view still renders even if the original employee record was deleted.
+        if (!$employee) {
+            $employee = (object) [
+                'full_name'   => $letter->employee_name,
+                'name'        => $letter->employee_name,
+                'given_name'  => '',
+                'middle_name' => '',
+                'last_name'   => '',
+                'suffix'      => '',
+                'position'    => $letter->employee_position,
+                'office'      => $letter->employee_office,
+            ];
+        }
+
+        $prefix            = $letter->employee_prefix;
+        $month             = $letter->month;
+        $year              = $letter->year;
+        $certifierName     = $letter->certifier_name;
+        $certifierPosition = $letter->certifier_position;
+        $referenceNo       = $letter->reference_no;
+
+        if ($letter->type === 'tardy') {
+            $tardinessCount = $letter->occurrences;
+            return view('admin.tardy_letter_print', compact(
+                'employee', 'prefix', 'month', 'year',
+                'tardinessCount', 'certifierName', 'certifierPosition', 'referenceNo'
+            ));
+        }
+
+        $undertimeCount = $letter->occurrences;
+        return view('admin.undertime_letter_print', compact(
+            'employee', 'prefix', 'month', 'year',
+            'undertimeCount', 'certifierName', 'certifierPosition', 'referenceNo'
+        ));
+    })->name('admin.undertime-tardy.generated-letters.print');
+
+    Route::delete('/undertime-tardy/generated-letters/{id}', function ($id) {
+        $letter = \App\Models\GeneratedLetter::findOrFail($id);
+        $name = $letter->employee_name;
+        $type = ucfirst($letter->type);
+        $letter->delete();
+
+        \App\Models\ActivityLog::log(
+            'letter_deleted',
+            $type . ' letter deleted for ' . $name,
+            ['entity' => 'generated_letter']
+        );
+
+        return redirect()->route('admin.undertime-tardy.generated-letters')
+            ->with('status', 'Letter record deleted.');
+    })->name('admin.undertime-tardy.generated-letters.destroy');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

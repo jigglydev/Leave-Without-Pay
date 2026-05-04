@@ -7,9 +7,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
+        [x-cloak] { display: none !important; }
         body { font-family: 'Inter', sans-serif; }
         /* Smooth sidebar & transitions */
         .sidebar-link { transition: all .18s ease; }
@@ -195,6 +197,51 @@
             Activity Log
         </a>
         @endif
+
+        {{-- Undertime & Tardy Records (Collapsible) --}}
+        <div x-data="{ expanded: {{ request()->routeIs('admin.undertime-tardy.*') ? 'true' : 'false' }} }">
+            <button @click="expanded = !expanded"
+                    class="sidebar-link w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all
+                           {{ request()->routeIs('admin.undertime-tardy.*')
+                               ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white'
+                               : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                <div class="flex items-center gap-3">
+                    <span class="link-icon w-5 h-5 flex-shrink-0 transition-transform duration-200">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </span>
+                    Undertime & Tardy
+                </div>
+                <svg class="w-4 h-4 transition-transform duration-200" :class="expanded ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            
+            <div x-show="expanded" x-collapse x-cloak class="mt-1 space-y-1 pl-11">
+                <a href="{{ route('admin.undertime-tardy.tardy-letter') }}"
+                   class="flex items-center gap-2 py-2 text-sm font-medium transition-colors
+                          {{ request()->routeIs('admin.undertime-tardy.tardy-letter')
+                              ? 'text-blue-600 dark:text-blue-400'
+                              : 'text-slate-500 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white' }}">
+                    Tardy Letter
+                </a>
+                <a href="{{ route('admin.undertime-tardy.undertime-letter') }}"
+                   class="flex items-center gap-2 py-2 text-sm font-medium transition-colors
+                          {{ request()->routeIs('admin.undertime-tardy.undertime-letter')
+                              ? 'text-blue-600 dark:text-blue-400'
+                              : 'text-slate-500 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white' }}">
+                    Undertime Letter
+                </a>
+                <a href="{{ route('admin.undertime-tardy.generated-letters') }}"
+                   class="flex items-center gap-2 py-2 text-sm font-medium transition-colors
+                          {{ request()->routeIs('admin.undertime-tardy.generated-letters*')
+                              ? 'text-blue-600 dark:text-blue-400'
+                              : 'text-slate-500 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white' }}">
+                    Generated Letters
+                </a>
+            </div>
+        </div>
 
         {{-- Settings --}}
         <a href="{{ route('admin.settings') }}"
