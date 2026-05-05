@@ -471,7 +471,12 @@
                     <td class="border border-slate-100 dark:border-slate-700 px-3 py-3 text-center text-slate-700 dark:text-slate-200">{{ $rec->no_pay_vl ?? '—' }}</td>
                     <td class="border border-slate-100 dark:border-slate-700 px-3 py-3 text-center text-slate-700 dark:text-slate-200">{{ $rec->no_pay_sl ?? '—' }}</td>
                     <td class="border border-slate-100 dark:border-slate-700 px-3 py-3 text-center font-semibold text-slate-800 dark:text-slate-100">{{ $rec->no_pay_total ?? '—' }}</td>
-                    <td class="border border-slate-100 dark:border-slate-700 px-3 py-3 text-slate-600 dark:text-slate-300 text-[11px]">{{ $rec->no_pay_dates ? \App\Models\LeaveRecord::formatDates($rec->no_pay_dates) : '—' }}</td>
+                    <td class="border border-slate-100 dark:border-slate-700 px-3 py-3 text-slate-600 dark:text-slate-300 text-[11px]">
+                        {{ $rec->no_pay_dates ? \App\Models\LeaveRecord::formatDates($rec->no_pay_dates) : '—' }}
+                        @if($rec->remarks)
+                            <span class="text-blue-500 font-medium">({{ $rec->remarks }})</span>
+                        @endif
+                    </td>
                     <td class="border border-slate-100 dark:border-slate-700 px-3 py-3 text-center text-slate-700 dark:text-slate-200">{{ $rec->undertime_hours ?? '—' }}</td>
                     <td class="border border-slate-100 dark:border-slate-700 px-3 py-3 text-center text-slate-700 dark:text-slate-200">{{ $rec->undertime_minutes ?? '—' }}</td>
                     <td class="border border-slate-100 dark:border-slate-700 px-3 py-3 text-slate-600 dark:text-slate-300 text-[11px]">{{ $rec->undertime_dates ? \App\Models\LeaveRecord::formatDates($rec->undertime_dates) : '—' }}</td>

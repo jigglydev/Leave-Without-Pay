@@ -24,6 +24,7 @@ class LeaveRecord extends Model
         'undertime_hours',
         'undertime_minutes',
         'undertime_dates',
+        'remarks',
     ];
 
     protected $casts = [

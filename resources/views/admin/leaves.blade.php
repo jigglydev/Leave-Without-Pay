@@ -245,6 +245,14 @@
                         </template>
                     </div>
                 </div>
+                {{-- Remarks --}}
+                <div class="mt-3">
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Remarks (Optional)</label>
+                    <textarea name="remarks" rows="2"
+                              placeholder="Add any notes here…"
+                              class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700
+                                     text-slate-800 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 transition">{{ old('remarks') }}</textarea>
+                </div>
             </div>
 
             {{-- ── Column C: Undertime / Tardy W/OUT Pay ────────────── --}}

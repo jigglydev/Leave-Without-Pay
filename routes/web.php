@@ -156,6 +156,7 @@ Route::middleware('auth')->group(function () {
             'undertime_minutes'  => ['nullable', 'integer', 'min:0', 'max:59'],
             'undertime_dates'    => ['nullable', 'array'],
             'undertime_dates.*'  => ['date'],
+            'remarks'            => ['nullable', 'string'],
         ]);
 
         $vl = floatval($request->input('no_pay_vl') ?? 0);
@@ -206,6 +207,7 @@ Route::middleware('auth')->group(function () {
             'undertime_hours'   => $request->input('undertime_hours') ?? null,
             'undertime_minutes' => $request->input('undertime_minutes') ?? null,
             'undertime_dates'   => $request->input('undertime_dates') ?? null,
+            'remarks'           => $request->input('remarks'),
         ]);
 
         return redirect()->route('admin.leaves')->with('status', 'Leave record saved successfully!');
@@ -305,6 +307,7 @@ Route::middleware('auth')->group(function () {
             'undertime_minutes'  => ['nullable', 'integer', 'min:0', 'max:59'],
             'undertime_dates'    => ['nullable', 'array'],
             'undertime_dates.*'  => ['date'],
+            'remarks'            => ['nullable', 'string'],
         ]);
 
         $vl = floatval($request->input('no_pay_vl') ?? 0);
@@ -360,6 +363,7 @@ Route::middleware('auth')->group(function () {
             'undertime_hours'   => $request->input('undertime_hours') ?? null,
             'undertime_minutes' => $request->input('undertime_minutes') ?? null,
             'undertime_dates'   => $request->input('undertime_dates') ?? null,
+            'remarks'           => $request->input('remarks'),
         ]);
 
         $displayName = $snapshotName ?? 'unknown employee';

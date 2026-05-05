@@ -368,6 +368,9 @@
                     <td>{{ $record->no_pay_total ?? '' }}</td>
                     <td class="left-align">
                         {{ $record->no_pay_dates ? \App\Models\LeaveRecord::formatDates($record->no_pay_dates) : '' }}
+                        @if($record->remarks)
+                            ({{ $record->remarks }})
+                        @endif
                     </td>
                     <td>{{ $record->undertime_hours ?? '' }}</td>
                     <td>{{ $record->undertime_minutes ?? '' }}</td>
