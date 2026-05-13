@@ -386,7 +386,42 @@
             max-width: 310px;
         }
 
+
+        /* ── Developer Credit ── */
+        .dev-credit {
+            position: absolute;
+            bottom: 4px;
+            font-size: 0.59rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            z-index: 25;
+            white-space: nowrap;
+            
+            /* Shiny Animation */
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: devShine 4s linear infinite;
+        }
+        .dev-credit-left {
+            right: 0;
+            padding-right: 4px;
+            background-image: linear-gradient(120deg, #ffffff 30%, #93c5fd 50%, #ffffff 70%);
+        }
+        .dev-credit-right {
+            left: 0;
+            padding-left: 4px;
+            background-image: linear-gradient(120deg, #2563eb 30%, #ffffff 50%, #2563eb 70%);
+        }
+
+        @keyframes devShine {
+            0% { background-position: 120% center; }
+            100% { background-position: -120% center; }
+        }
+
         /* ── Responsive ──────────────────────────────────────── */
+
         @media (max-width: 680px) {
             .auth-card {
                 flex-direction: column;
@@ -397,6 +432,18 @@
             .panel-right { padding: 32px 28px 36px; }
             .logo-bar-text .province,
             .logo-bar-text .system { color: #fff; }
+
+            .dev-credit {
+                position: relative;
+                bottom: 0;
+                right: auto;
+                left: auto;
+                text-align: center;
+                display: block;
+                margin-top: 15px;
+            }
+            .dev-credit-left { padding-right: 0; }
+            .dev-credit-right { padding-left: 0; }
         }
     </style>
 </head>
@@ -482,6 +529,7 @@
                 <button type="submit" class="btn-signin">Sign In</button>
             </form>
         </div>
+        <div class="dev-credit dev-credit-left">SYSTEM DEVELOPED BY:</div>
     </div>
 
     {{-- ══════════════ RIGHT PANEL – SIGN UP ══════════════ --}}
@@ -562,6 +610,7 @@
 
             <button type="submit" class="btn-signup">Sign Up</button>
         </form>
+        <div class="dev-credit dev-credit-right">ANGEL MAE LAGARE</div>
     </div>
 
 </div>
